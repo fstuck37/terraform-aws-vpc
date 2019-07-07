@@ -7,6 +7,7 @@ This module deploys an AWS VPC and all necessary components to prepare an enviro
 
 The goal of this project is to provide a streamlined, simple Terraform script to deploy and start running a network in AWS.
 
+
 Example
 ------------
 ```
