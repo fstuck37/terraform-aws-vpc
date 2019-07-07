@@ -1,9 +1,11 @@
 output "vpc_id" {
+  description = "The ID of the VPC"
   value = "${aws_vpc.main_vpc.id}"
 }
 
 output "vpc_name" {
-  value = "${aws_vpc.main_vpc.id}"
+  description = "The name of the VPC"
+  value = "${format("%s", var.vpc-name == "true" ? "${var.name-vars["account"]}-${replace(var.region,"-", "")}-${var.name-vars["name"]}" : var.vpc-name)}"
 }
 
 output "subnet_ids" {
