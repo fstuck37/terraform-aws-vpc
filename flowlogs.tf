@@ -13,7 +13,7 @@
 resource "aws_flow_log" "vpc_flowlog" {
   count = "${var.enable_flowlog ? 1 : 0 }"
   vpc_id = "${aws_vpc.main_vpc.id}"
-  log_group_name = "${aws_cloudwatch_log_group.flowlog_group.0.name}"
+  log_destination = "${aws_cloudwatch_log_group.flowlog_group.0.name}"
   iam_role_arn = "${aws_iam_role.flowlog_role.0.arn}"
   traffic_type = "ALL"
 }
