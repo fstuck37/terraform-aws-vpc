@@ -20,7 +20,7 @@ resource "aws_flow_log" "vpc_flowlog" {
 
 resource "aws_cloudwatch_log_group" "flowlog_group" {
   count = var.enable_flowlog ? 1 : 0
-  name = {aws_vpc.main_vpc.id
+  name = aws_vpc.main_vpc.id
   retention_in_days = var.cloudwatch_retention_in_days
   tags = merge(var.tags,map("Name","${var.name-vars["account"]}-${var.region}-${var.name-vars["name"]}-log"))
 }
