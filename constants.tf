@@ -76,5 +76,9 @@ variable "zones" {
       "us-gov-east-1c",
       "us-gov-east-1b"
     ]
+    cn-north-1 = [
+      "cn-north-1a",
+      "cn-north-1b"
+    ]
   }
 }
