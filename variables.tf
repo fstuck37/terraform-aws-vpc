@@ -129,6 +129,25 @@ variable "enable-s3-endpoint" {
   default     = "false"
 }
 
+variable "enable-dynamodb-endpoint" {
+  description = "Optional : Enable the DynamoDB Endpoint"
+  default     = "false"
+}
+
+variable "private_endpoints_subnet" {
+  description = "The subnet to install private endpoints, the default is mgt."
+  default = "mgt"
+}
+
+variable "private_endpoints" {
+  description = "List of private AWS Endpoints - <REGION> will be replace with the region of the VPC. This helps standardize inputs between VPCs for example you can send com.amazonaws.<REGION>.cloudformation for a cloudformation endpoint."
+  default = []
+}
+
+variable "private_endpoints_security_group" {
+  description = "List of security groups IDs to apply to each AWS Endpoint. The list should be the same length as private_endpoints. If multiple security are required for an individual endpoint delemit each with a pipe (|)."
+  default = []
+}
 
 /* Peer Links */
 variable "peer_requester" {
