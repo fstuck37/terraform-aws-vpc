@@ -22,12 +22,12 @@ resource "aws_cloudwatch_log_group" "flowlog_group" {
   count = var.enable_flowlog ? 1 : 0
   name = aws_vpc.main_vpc.id
   retention_in_days = var.cloudwatch_retention_in_days
-  tags = merge(var.tags,map("Name","${var.name-vars["account"]}-${var.region}-${var.name-vars["name"]}-log"))
+  tags = merge(var.tags,map("Name","${var.name-vars["account"]}-${replace(var.region,"-", "")-${var.name-vars["name"]}-log"))
 }
 
 resource "aws_iam_role" "flowlog_role" {
   count = var.enable_flowlog ? 1 : 0
-  name = "${var.name-vars["account"]}-${var.region}-${var.name-vars["name"]}-flow-log-role"
+  name = "${var.name-vars["account"]}-${replace(var.region,"-", "")-${var.name-vars["name"]}-flow-log-role"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -47,7 +47,7 @@ EOF
 
 resource "aws_iam_role_policy" "flowlog_write" {
   count = var.enable_flowlog ? 1 : 0
-  name = "${var.name-vars["account"]}-${var.region}-${var.name-vars["name"]}-write-to-cloudwatch"
+  name = "${var.name-vars["account"]}-${replace(var.region,"-", "")-${var.name-vars["name"]}-write-to-cloudwatch"
   role = aws_iam_role.flowlog_role.0.id
   policy = <<EOF
 {
@@ -72,7 +72,7 @@ EOF
 resource "aws_iam_role" "flowlog_subscription_role" {
   count = var.enable_flowlog ? 1 : 0
 
-  name = "${var.name-vars["account"]}-${var.region}-${var.name-vars["name"]}-flow-log-subscription-role"
+  name = "${var.name-vars["account"]}-${replace(var.region,"-", "")-${var.name-vars["name"]}-flow-log-subscription-role"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
