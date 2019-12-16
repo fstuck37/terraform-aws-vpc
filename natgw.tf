@@ -12,7 +12,7 @@
 ##################################################
 
 resource "aws_nat_gateway" "natgw" {
-  count = contains(keys(var.subnets), "pub")  && !(var.deploy_natgateways == "false") ? local.num-availbility-zones : 0
+  count = contains(keys(var.subnets), "pub")  && !(var.deploy_natgateways == false) ? local.num-availbility-zones : 0
   allocation_id  = aws_eip.eip.*.id[count.index]
   subnet_id = local.pub-subnet-ids[count.index]
 }

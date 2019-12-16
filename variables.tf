@@ -27,7 +27,7 @@ variable "tags" {
 /* VPC Variables */
 variable "vpc-name" {
   description = "Optional : Override the calculated VPC name"
-  default     = "true"
+  default     = true
 }
 
 variable "enable_dns_support" {
@@ -119,19 +119,19 @@ variable "dx_bgp_default_route" {
 
 variable "dx_gateway_id" {
   description = "Optional : specify the Direct Connect Gateway ID to associate the VGW with."
-  default     = "false"
+  default     = false
 }
 
 /* Endpoint Configuration */
 
 variable "enable-s3-endpoint" {
   description = "Optional : Enable the S3 Endpoint"
-  default     = "false"
+  default     = false
 }
 
 variable "enable-dynamodb-endpoint" {
   description = "Optional : Enable the DynamoDB Endpoint"
-  default     = "false"
+  default     = false
 }
 
 variable "private_endpoints_subnet" {
@@ -165,7 +165,7 @@ variable "peer_accepter" {
 /* NAT Gateway */
 variable "deploy_natgateways" {
   description = "Optional : Set to true to deploy NAT gateways if pub subnet is created"
-  default = "false"
+  default = false
 }
 
 /* VPC Flow Logs */

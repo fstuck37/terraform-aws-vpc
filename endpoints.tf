@@ -11,7 +11,7 @@
 ##################################################
 
 resource "aws_vpc_endpoint" "private-s3" {
-   count           = var.enable-s3-endpoint == "true" ? 1 : 0
+   count           = var.enable-s3-endpoint == true ? 1 : 0
    vpc_id          = aws_vpc.main_vpc.id
    service_name    = "com.amazonaws.${var.region}.s3"
    route_table_ids = aws_route_table.privrt.*.id
@@ -19,7 +19,7 @@ resource "aws_vpc_endpoint" "private-s3" {
 
 
 resource "aws_vpc_endpoint" "private-dynamodb" {
-   count           = var.enable-dynamodb-endpoint == "true" ? 1 : 0
+   count           = var.enable-dynamodb-endpoint == true ? 1 : 0
    vpc_id          = aws_vpc.main_vpc.id
    service_name    = "com.amazonaws.${var.region}.dynamodb"
    route_table_ids = aws_route_table.privrt.*.id

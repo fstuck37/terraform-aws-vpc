@@ -19,7 +19,7 @@ module "vpc" {
   name-vars = "${var.name-vars}"
   subnets = "${var.subnets}"
   subnet-order = "${var.subnet-order}"
-  deploy_natgateways = "true"
+  deploy_natgateways = true
   tags = "${var.tags}"
 }
 

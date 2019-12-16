@@ -5,7 +5,7 @@ output "vpc_id" {
 
 output "vpc_name" {
   description = "The name of the VPC"
-  value = "${format("%s", var.vpc-name == "true" ? "${var.name-vars["account"]}-${replace(var.region,"-", "")}-${var.name-vars["name"]}" : var.vpc-name)}"
+  value = "${format("%s", var.vpc-name == true ? "${var.name-vars["account"]}-${replace(var.region,"-", "")}-${var.name-vars["name"]}" : var.vpc-name)}"
 }
 
 output "subnet_ids" {
