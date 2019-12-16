@@ -129,8 +129,8 @@ Argument Reference
 * **DxGW, NAT Gateway, Endpoints, and Peer Links**
    * **dx_bgp_default_route** - Optional : A boolean flag that indicates that the default gateway will be advertised via BGP over Direct Connect and causes the script to not deploy NAT Gateways.
    * **dx_gateway_id** - Optional : specify the Direct Connect Gateway ID to associate the VGW with.
-   * **enable-s3-endpoint** - Optional : Enable the S3 Endpoint
-   * **enable-dynamodb-endpoint** - Optional : Enable the DynamoDB Endpoint
+   * **enable-s3-endpoint** - Optional : Enable the S3 Endpoint, default is false
+   * **enable-dynamodb-endpoint** - Optional : Enable the DynamoDB Endpoint, default is false
    * **private_endpoints_subnet** - Optional : The subnet to install private endpoints. The value must exist in subnet-order.
    * **private_endpoints** - Optional : List of private AWS Endpoints - <REGION> will be replace with the region of the VPC. This helps standardize inputs between VPCs for example you can send com.amazonaws.<REGION>.cloudformation for a cloudformation endpoint.
    * **private_endpoints_security_group** - Optional : List of security groups IDs to apply to each AWS Endpoint. The list should be the same length as private_endpoints. If multiple security groups are required for an individual endpoint delemit each with a pipe (|).
