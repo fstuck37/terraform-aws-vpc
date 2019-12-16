@@ -11,7 +11,7 @@
 ##################################################
 
 resource "aws_internet_gateway" "inet-gw" {
-  count = "${contains(keys(var.subnets), "pub") ? 1 : 0}"
-  vpc_id = "${aws_vpc.main_vpc.id}" 
-  tags = "${merge(var.tags,map("Name",format("%s", "${var.name-vars["account"]}-${var.name-vars["name"]}-${replace(var.region,"-", "")}-igw" )))}"
+  count = contains(keys(var.subnets), "pub") ? 1 : 0
+  vpc_id = aws_vpc.main_vpc.id
+  tags = merge(var.tags,map("Name",format("%s", "${var.name-vars["account"]}-${var.name-vars["name"]}-${replace(var.region,"-", "")}-igw" )))
 }
