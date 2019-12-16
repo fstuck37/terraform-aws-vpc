@@ -11,7 +11,7 @@
 ##################################################
 
 resource "aws_eip" "eip" {
-  count = "${contains(keys(var.subnets), "pub")  && !(var.deploy_natgateways == "false") ? local.num-availbility-zones : 0}"
+  count = contains(keys(var.subnets), "pub")  && !(var.deploy_natgateways == "false") ? local.num-availbility-zones : 0
   vpc = true
 }
 
