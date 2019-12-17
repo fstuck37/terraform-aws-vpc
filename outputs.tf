@@ -40,6 +40,6 @@ output "peerlink_ids" {
 }
 
 
-output "subnets-list" {
-  value = local.subnets-list
+output "subnet-order" {
+  value = local.subnet-order
 }
