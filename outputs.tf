@@ -40,3 +40,12 @@ output "peerlink_ids" {
 }
 
 
+
+
+output "azs-list" {
+  value = local.azs-list
+}
+
+output "subnets-list" {
+  value = local.subnets-list
+}
