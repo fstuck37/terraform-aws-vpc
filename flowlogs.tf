@@ -36,7 +36,7 @@ resource "aws_iam_role" "flowlog_role" {
       "Sid": "",
       "Effect": "Allow",
       "Principal": {
-        "Service": "vpc-flow-logs.${var.amazonaws-com}"
+        "Service": "vpc-flow-logs.amazonaws.com}"
       },
       "Action": "sts:AssumeRole"
     }
