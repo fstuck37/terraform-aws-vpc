@@ -188,3 +188,8 @@ variable "cloudwatch_retention_in_days" {
   description = "Optional : Number of days to keep logs within the cloudwatch log_group. The default is 7 days."
   default = "7"
 }
+
+variable "amazonaws-com" {
+  description = "Optional : Ability to change principal for flowlogs from amazonaws.com to amazonaws.com.cn."
+  default = "amazonaws.com"
+}

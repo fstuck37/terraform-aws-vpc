@@ -36,7 +36,7 @@ resource "aws_iam_role" "flowlog_role" {
       "Sid": "",
       "Effect": "Allow",
       "Principal": {
-        "Service": "vpc-flow-logs.amazonaws.com"
+        "Service": "vpc-flow-logs.${var.amazonaws-com}"
       },
       "Action": "sts:AssumeRole"
     }
@@ -81,7 +81,7 @@ resource "aws_iam_role" "flowlog_subscription_role" {
       "Sid": "",
       "Effect": "Allow",
       "Principal": {
-        "Service": "logs.${var.region}.amazonaws.com"
+        "Service": "logs.${var.region}.${var.amazonaws-com}"
       },
       "Action": "sts:AssumeRole"
     }
@@ -104,7 +104,7 @@ resource "aws_lambda_permission" "allow_cloudwatch" {
   statement_id   = "AllowExecutionFromCloudWatch_${aws_vpc.main_vpc.id}"
   action         = "lambda:InvokeFunction"
   function_name  = var.aws_lambda_function_name
-  principal      = "logs.${var.region}.amazonaws.com"
+  principal      = "logs.${var.region}.${var.amazonaws-com}"
   source_account = var.acctnum
   source_arn     = aws_cloudwatch_log_group.flowlog_group.0.arn
 }

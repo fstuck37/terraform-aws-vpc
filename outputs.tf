@@ -38,9 +38,3 @@ output "peerlink_ids" {
   description = "Map with keys the same as the peer_requester variable and a value of the ID of the VPC Peering Connection."
   value = zipmap(keys(var.peer_requester), aws_vpc_peering_connection.peer.*.id)
 }
-
-
-
-output "subnet-order" {
-  value = local.subnet-order
-}
