@@ -59,6 +59,12 @@ variable "subnets" {
   }
 }
 
+variable "fixed-subnets" {
+  type = map(list(string))
+  description = "Optional : Keys are used for subnet names and values are the list of subnets for each AZ. The number of subnets specified in each list needs to match the number of AZs. 'pub' is the only special name used for the public subnet and must be specified first."
+  default = { }
+}
+
 variable "subnet-order" {
   type = list(string)
   description = "Required : Order in which subnets are created. Changes can cause recreation issues when subnets are added when something precedes other subnets. Must include all key names."
