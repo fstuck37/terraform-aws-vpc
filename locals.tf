@@ -47,25 +47,28 @@ data "template_file" "subnets-two" {
 }
 
 /* Peer Link */
-data "template_file" "peerlink-one" {
-  count    = local.peerlink-size
-  template = count.index
-}
- 
-data "template_file" "peerlink-two" {
-  count    = local.routetable-size
-  template = join(",", data.template_file.peerlink-one.*.rendered)
-}
-
 data "template_file" "routetable-one" {
   count    = local.routetable-size
   template = count.index
 }
 
 data "template_file" "routetable-two" {
-  count    = length(data.template_file.routetable-one.*.rendered)
-  template = join(",",slice(split(",", replace(join(",", local.baselist), "A", data.template_file.routetable-one.*.rendered[count.index])), 0, local.peerlink-size))
+  count    = local.peerlink-size
+  template = join(",", data.template_file.routetable-one.*.rendered)
 }
+
+data "template_file" "peerlink-one" {
+  count    = local.peerlink-size
+  template = count.index
+}
+
+data "template_file" "peerlink-two" {
+  count    = length(data.template_file.peerlink-one.*.rendered)
+  template = join(",",slice(split(",", replace(join(",", local.baselist), "A", data.template_file.peerlink-one.*.rendered[count.index])), 0, local.routetable-size))
+}
+
+
+
 
 /* Peer Link Accepter */
 data "template_file" "peerlink-accepter-one" {
