@@ -18,11 +18,15 @@ resource "aws_vpc_peering_connection" "peer" {
   auto_accept   = var.acctnum == element(split("|", var.peer_requester[element(keys(var.peer_requester),count.index)]),0) ? true : false
 
   accepter {
-    allow_remote_vpc_dns_resolution = true
+    allow_classic_link_to_remote_vpc = false
+    allow_remote_vpc_dns_resolution  = true
+    allow_vpc_to_remote_classic_link = false
   }
 
   requester {
-    allow_remote_vpc_dns_resolution = true
+    allow_classic_link_to_remote_vpc = false
+    allow_remote_vpc_dns_resolution  = true
+    allow_vpc_to_remote_classic_link = false
   }
 
   tags = merge(var.tags, map("Name", format("%s", "${element(keys(var.peer_requester),count.index)}-peerlink")))

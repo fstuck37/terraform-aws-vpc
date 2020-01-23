@@ -68,8 +68,6 @@ data "template_file" "peerlink-two" {
 }
 
 
-
-
 /* Peer Link Accepter */
 data "template_file" "peerlink-accepter-one" {
   count    = local.peerlink-accepter-size
