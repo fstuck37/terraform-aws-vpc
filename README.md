@@ -135,12 +135,12 @@ Argument Reference
    * **private_endpoints** - Optional : List of private AWS Endpoints - <REGION> will be replace with the region of the VPC. This helps standardize inputs between VPCs for example you can send com.amazonaws.<REGION>.cloudformation for a cloudformation endpoint.
    * **private_endpoints_security_group** - Optional : List of security groups IDs to apply to each AWS Endpoint. The list should be the same length as private_endpoints. If multiple security groups are required for an individual endpoint delemit each with a pipe (|).
    * **deploy_natgateways** - Optional : Set to true to deploy NAT gateways if pub subnet is created
-   * **peer_requester** - Optional : Map of Peer Link Name with a value of [Peer AWS Account Number]|[Peer VPC_ID]|[Peer VPC CIDR]. This only creates the requester half of the connection. Since maps our lexically prepend the VPC name with a alpha character so they flow alphabetically, for example a-peerlink1, b-peerlink2, etc.
+   * **peer_requester** - Optional : Map of Peer Link Name with a value of [Peer AWS Account Number]|[Peer VPC_ID]|[Peer VPC CIDR]|[allow_remote_vpc_dns_resolution]. This only creates the requester half of the connection. Since maps our lexically prepend the VPC name with a alpha character so they flow alphabetically, for example a-peerlink1, b-peerlink2, etc.
    ```
    variable "peer_requester" {
      type = "map"
      default = {
-       a_dev2 = "1234567890123|vpc-0c23f7846a96a4723|10.1.0.0/21"
+       a_dev2 = "1234567890123|vpc-0c23f7846a96a4723|10.1.0.0/21|true"
      }
    }
    ```
