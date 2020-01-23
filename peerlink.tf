@@ -16,13 +16,13 @@ resource "aws_vpc_peering_connection" "peer" {
   peer_vpc_id   = element(split("|", var.peer_requester[element(keys(var.peer_requester),count.index)]),1)
   peer_owner_id = element(split("|", var.peer_requester[element(keys(var.peer_requester),count.index)]),0)
   auto_accept   = var.acctnum == element(split("|", var.peer_requester[element(keys(var.peer_requester),count.index)]),0) ? true : false
-
+/*
   accepter {
     allow_classic_link_to_remote_vpc = false
     allow_remote_vpc_dns_resolution  = element(split("|", var.peer_requester[element(keys(var.peer_requester),count.index)]),3)
     allow_vpc_to_remote_classic_link = false
   }
-
+*/
   requester {
     allow_classic_link_to_remote_vpc = false
     allow_remote_vpc_dns_resolution  = element(split("|", var.peer_requester[element(keys(var.peer_requester),count.index)]),3)
