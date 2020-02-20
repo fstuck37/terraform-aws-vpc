@@ -80,5 +80,10 @@ variable "zones" {
       "cn-north-1a",
       "cn-north-1b"
     ]
+    cn-northwest-1 = [
+      "cn-northwest-1a",
+      "cn-northwest-1b",
+      "cn-northwest-1c",
+    ]
   }
 }
