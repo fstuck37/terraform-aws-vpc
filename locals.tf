@@ -1,11 +1,9 @@
 locals {
   num-availbility-zones = "${length(var.zones[var.region])}"
-  subnet-order = "${ coalescelist( var.subnet-order, keys(var.subnets)) }"
+  subnet-order = coalescelist( var.subnet-order, keys(var.subnets))
 
   /* NOTE: Requires that pub is first */
-  pub-subnet-ids = length(aws_subnet.subnets.*.id) < local.num-availbility-zones ? [] : slice(aws_subnet.subnets.*.id, 0, local.num-availbility-zones)
-
-
+  pub-subnet-ids = slice(aws_subnet.subnets.*.id, 0, local.num-availbility-zones)
 
   baselist = ["A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A","A",]
   azs-size = local.num-availbility-zones
