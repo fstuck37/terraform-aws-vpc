@@ -3,7 +3,8 @@ locals {
   subnet-order = "${ coalescelist( var.subnet-order, keys(var.subnets)) }"
 
   /* NOTE: Requires that pub is first */
-  pub-subnet-ids = (length(var.subnets)*local.num-availbility-zones) == 0 ? [] : slice(aws_subnet.subnets.*.id, 0, local.num-availbility-zones)
+  pub-subnet-ids = ( slice(aws_subnet.subnets.*.id, 0, (length(var.subnets)*local.num-availbility-zones) == 0 ? 0 : local.num-availbility-zones) )
+
 
 
 
