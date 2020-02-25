@@ -13,7 +13,6 @@ output "subnet_ids" {
   value = zipmap(data.template_file.subnet-name.*.rendered, aws_subnet.subnets.*.id)
 }
 
-
 output "map_subnet_id_list" {
   description = "Map with keys the same as subnet-order and values a list of subnet IDs"
   value = zipmap(var.subnet-order, chunklist(aws_subnet.subnets.*.id, local.num-availbility-zones))
