@@ -10,12 +10,12 @@ output "vpc_name" {
 
 output "subnet_ids" {
   description = "Map with keys based on the subnet names and values of subnet IDs"
-  value = zipmap(data.template_file.subnet-name.*.rendered, aws_subnet.subnets.*.id)
+  value = length(data.template_file.subnet-name.*.rendered) == length(aws_subnet.subnets.*.id) ? zipmap(data.template_file.subnet-name.*.rendered, aws_subnet.subnets.*.id) : {}
 }
 
 output "map_subnet_id_list" {
   description = "Map with keys the same as subnet-order and values a list of subnet IDs"
-  value = zipmap(var.subnet-order, chunklist(aws_subnet.subnets.*.id, local.num-availbility-zones))
+  value = length(aws_subnet.subnets.*.id) == 0 ? {} : zipmap(var.subnet-order, chunklist(aws_subnet.subnets.*.id, local.num-availbility-zones))
 }
 
 output "pubrt_id" {
