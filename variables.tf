@@ -133,6 +133,11 @@ variable "transit_gateway_id" {
   default     = false
 }
 
+variable "transit_gateway_routes" {
+  type = list(string)
+  description = "Optional : specify the networks to route to the Transit Gateway"
+  default     = []
+}
 
 
 /* Endpoint Configuration */
