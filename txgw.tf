@@ -16,6 +16,6 @@ resource "aws_route" "txgw-routes" {
 
 module "txgw-route" {
   source  = "git::https://github.com/fstuck37/doubleiterator.git"
-  e1-size = length(var.transit_gateway_routes)
-  e2-size = local.num-availbility-zones
+  e1-size = local.num-availbility-zones
+  e2-size = length(var.transit_gateway_routes)
 }
