@@ -39,3 +39,11 @@ output "peerlink_ids" {
 }
 
 
+
+output "aws_ec2_transit_gateway_vpc_attachment" {
+  description = "ID of the transit gateway attachment"
+  value = (join("",aws_ec2_transit_gateway_vpc_attachment.txgw_attachment.*.id))
+}
+
+
+
