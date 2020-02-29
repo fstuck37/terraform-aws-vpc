@@ -38,8 +38,6 @@ output "peerlink_ids" {
   value = length(keys(var.peer_requester)) == length(aws_vpc_peering_connection.peer.*.id) ? zipmap(keys(var.peer_requester), aws_vpc_peering_connection.peer.*.id) : {}
 }
 
-
-
 output "aws_ec2_transit_gateway_vpc_attachment" {
   description = "ID of the transit gateway attachment"
   value = (join("",aws_ec2_transit_gateway_vpc_attachment.txgw_attachment.*.id))

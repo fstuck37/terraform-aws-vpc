@@ -9,11 +9,10 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "txgw_attachment" {
 resource "aws_route" "txgw-routes" {
   count                  = var.transit_gateway_id == false ? 0 : length(var.transit_gateway_routes) * local.num-availbility-zones
   
-  route_table_id         = aws_route_table.privrt.*.id[module.txgw-route.e2-list[count.index]]
-  destination_cidr_block = var.transit_gateway_routes[module.txgw-route.e1-list[count.index]]
+  route_table_id         = aws_route_table.privrt.*.id[module.txgw-route.e1-list[count.index]]
+  destination_cidr_block = var.transit_gateway_routes[module.txgw-route.e2-list[count.index]]
   transit_gateway_id     = var.transit_gateway_id
 }
-
 
 module "txgw-route" {
   source  = "git::https://github.com/fstuck37/doubleiterator.git"
