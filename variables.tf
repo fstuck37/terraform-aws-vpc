@@ -128,6 +128,13 @@ variable "dx_gateway_id" {
   default     = false
 }
 
+variable "transit_gateway_id" {
+  description = "Optional : specify the Transit Gateway ID to associate the VPC with."
+  default     = false
+}
+
+
+
 /* Endpoint Configuration */
 
 variable "enable-s3-endpoint" {

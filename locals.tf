@@ -19,7 +19,10 @@ locals {
   peerlink-accepter-size = length(var.peer_accepter)
   peerlink-accepter-list = split(",", join(",", data.template_file.peerlink-accepter-two.*.rendered))
   routetable-accepter-list = (split(",", join(",", data.template_file.routetable-accepter-two.*.rendered)))
+
+  map_subnet_id_list = length(aws_subnet.subnets.*.id) == 0 ? {} : zipmap(var.subnet-order, chunklist(aws_subnet.subnets.*.id, local.num-availbility-zones))
 }
+
 
 data "template_file" "subnet-name" {
   count    = length(var.subnets)*local.num-availbility-zones
