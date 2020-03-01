@@ -129,7 +129,7 @@ variable "dx_gateway_id" {
 }
 
 variable "transit_gateway_id" {
-  description = "Optional : specify the Transit Gateway ID to associate the VPC with."
+  description = "Optional : specify the Transit Gateway ID within the same account to associate the VPC with."
   default     = false
 }
 
@@ -138,7 +138,6 @@ variable "transit_gateway_routes" {
   description = "Optional : specify the networks to route to the Transit Gateway"
   default     = []
 }
-
 
 /* Endpoint Configuration */
 

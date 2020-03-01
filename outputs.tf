@@ -25,7 +25,7 @@ output "pubrt_id" {
 
 output "privrt_id" {
   description = "List of IDs of the private routing tables"
-  value = [aws_route_table.privrt.*.id]
+  value = aws_route_table.privrt.*.id
 }
 
 output "vgw_id" {
