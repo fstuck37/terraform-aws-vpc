@@ -18,7 +18,7 @@ resource "aws_subnet" "subnets" {
   tags              = merge(
     var.tags, 
     map("Name", format("%02s", "${var.name-vars["account"]}-${var.name-vars["name"]}-${element(local.subnet-order,local.subnets-list[count.index])}-az-${element(split("-", element(var.zones[var.region],local.azs-list[count.index])), length(split("-", element(var.zones[var.region],local.azs-list[count.index]))) - 1)}")),
-    map("Test", "${contains(keys(var.subnet-tags),"${element(local.subnet-order,local.subnets-list[count.index])}")}")
+    var.subnet-tags["${element(local.subnet-order,local.subnets-list[count.index])}"]
   )
 }
 
