@@ -6,6 +6,7 @@ locals {
   pub-subnet-ids = slice(aws_subnet.subnets.*.id, 0, local.num-availbility-zones)
 
   empty-subnet-tags = zipmap(keys(var.subnet-tags), slice(local.emptymaps, 0 ,length(keys(var.subnet-tags))))
+  subnet-tags = merge(local.empty-subnet-tags,var.subnet-tags)
   
   emptymaps = [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}]
   
