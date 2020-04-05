@@ -24,7 +24,7 @@ variable "tags" {
   default = {}
 }
 
-variable "subnets-tags" {
+variable "subnet-tags" {
   type = map(map(string))
   description = "Optional : A map of maps of tags to assign to specifc subnet resource."
   default = { }

@@ -15,7 +15,13 @@ resource "aws_subnet" "subnets" {
   vpc_id            = aws_vpc.main_vpc.id
   cidr_block        = contains(keys(var.fixed-subnets), element(local.subnet-order,local.subnets-list[count.index])) ? var.fixed-subnets[element(local.subnet-order,local.subnets-list[count.index])][local.azs-list[count.index]] : cidrsubnet(var.subnets[element(local.subnet-order,local.subnets-list[count.index])],ceil(log(length(var.zones[var.region]),2)),local.azs-list[count.index])
   availability_zone = element(var.zones[var.region],local.azs-list[count.index])
-  tags              = merge(var.tags, map("Name", format("%02s", "${var.name-vars["account"]}-${var.name-vars["name"]}-${element(local.subnet-order,local.subnets-list[count.index])}-az-${element(split("-", element(var.zones[var.region],local.azs-list[count.index])), length(split("-", element(var.zones[var.region],local.azs-list[count.index]))) - 1)}")))
+  
+  tags              = 
+    merge( 
+      var.tags, 
+      map("Name", format("%02s", "${var.name-vars["account"]}-${var.name-vars["name"]}-${element(local.subnet-order,local.subnets-list[count.index])}-az-${element(split("-", element(var.zones[var.region],local.azs-list[count.index])), length(split("-", element(var.zones[var.region],local.azs-list[count.index]))) - 1)}")),
+      map("Test",element(local.subnet-order,local.subnets-list[count.index]))
+  )
 }
 
 data "template_file" "subnets-tags" {
