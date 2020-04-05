@@ -80,6 +80,7 @@ Argument Reference
    * **vpc-cidrs** - Required : List of CIDRs to apply to the VPC.
    * **acctnum** - Required : AWS Account Number  
    * **tags** - Optional : A map of tags to assign to the resource.  
+   * **subnet-tags** - Optional : A map of maps of tags to assign to specifc subnet resource.  The key but be eamil to the key in subnets.
    * **vpc-name** - Optional : Override the calculated VPC name (NOTE: if this is not set the VPC name will be in the format name-vars[account]-[region]-name-vars[name] for example geek37-useast1-dev.)
    * **enable_dns_support** - Optional : A boolean flag to enable/disable DNS support in the VPC. Defaults true.
    * **enable_dns_hostnames** - Optional : A boolean flag to enable/disable DNS hostnames in the VPC. Defaults false.

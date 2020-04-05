@@ -26,7 +26,7 @@ variable "tags" {
 
 variable "subnet-tags" {
   type = map(map(string))
-  description = "Optional : A map of maps of tags to assign to specifc subnet resource."
+  description = "Optional : A map of maps of tags to assign to specifc subnet resource.  The key but be eamil to the key in subnets."
   default = { }
 }
 
