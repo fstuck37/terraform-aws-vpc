@@ -45,3 +45,6 @@ output "aws_ec2_transit_gateway_vpc_attachment" {
 
 
 
+output "test" {
+  value = local.empty-subnet-tags
+}
