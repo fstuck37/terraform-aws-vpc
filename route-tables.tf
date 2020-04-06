@@ -15,14 +15,22 @@
 resource "aws_route_table" "pubrt" {
   count  = !contains(keys(var.subnets), "pub") ? 0 : 1
   vpc_id = aws_vpc.main_vpc.id
-  tags   = merge(var.tags,map("Name",format("%s","${var.name-vars["account"]}-${var.name-vars["name"]}-pub")))
+  tags   = merge(
+    var.tags,
+    map("Name",format("%s","${var.name-vars["account"]}-${var.name-vars["name"]}-pub")),
+    local.resource-tags["aws_route_table"]
+  )
 }
 
 resource "aws_route_table" "privrt" {
   count            = length(var.zones[var.region])
   vpc_id           = aws_vpc.main_vpc.id
   propagating_vgws = [aws_vpn_gateway.vgw.id]
-  tags             = merge(var.tags,map("Name",format("%s","${var.name-vars["account"]}-${var.name-vars["name"]}-prod-az-${element(split("-", element(var.zones[var.region],count.index)), length(split("-", element(var.zones[var.region],count.index))) - 1)}")))
+  tags             = merge(
+    var.tags,
+    map("Name",format("%s","${var.name-vars["account"]}-${var.name-vars["name"]}-prod-az-${element(split("-", element(var.zones[var.region],count.index)), length(split("-", element(var.zones[var.region],count.index))) - 1)}")),
+    local.resource-tags["aws_route_table"]
+  )
   depends_on       = [aws_vpn_gateway.vgw]
 }
 

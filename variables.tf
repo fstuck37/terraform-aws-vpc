@@ -26,7 +26,13 @@ variable "tags" {
 
 variable "subnet-tags" {
   type = map(map(string))
-  description = "Optional : A map of maps of tags to assign to specifc subnet resource.  The key but be eamil to the key in subnets."
+  description = "Optional : A map of maps of tags to assign to specifc subnet resource.  The key but be the same as the key in variable subnets."
+  default = { }
+}
+
+variable "resource-tags" {
+  type = map(map(string))
+  description = "Optional : A map of maps of tags to assign to specifc resources.  The key must be one of the following: aws_vpc, aws_vpn_gateway, aws_subnet, aws_network_acl, aws_internet_gateway, aws_cloudwatch_log_group, aws_vpc_dhcp_options."
   default = { }
 }
 
