@@ -103,7 +103,7 @@ variable "ntp_servers" {
 variable "bypass_ingress_rules" {
   description = "Optional : Permit ingress Source|Port or Source|StartPort-EndPort for example 10.0.0.0/8|22 or 10.0.0.0/8|20-21"
   type = list(string)
-  default = ["10.0.0.0/8|22"]
+  default = []
 }
 
 variable "bypass_egress_rules" {
@@ -115,7 +115,7 @@ variable "bypass_egress_rules" {
 variable "block_ports" {
   description = "Optional : Ports to block both inbound and outbound"
   type = list(string)
-  default = ["20-21", "23", "137-139", "445", "1433", "1521", "3306", "3389", "5439", "5432"]
+  default = ["20-21", "22", "23", "137-139", "445", "1433", "1521", "3306", "3389", "5439", "5432"]
 }
 
 variable "ingress_block" {
