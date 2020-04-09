@@ -63,6 +63,24 @@ variable "shared_resolver_rule" {
   default     = false
 }
 
+variable "route53_resolver_endpoint" {
+  type = string
+  description = "Optional : A boolean flag to enable/disable Route53 Resolver Endpoint. Defaults false."
+  default = false
+}
+
+variable "route53_resolver_endpoint_cidr_blocks" {
+  description = "Optional : A list of the source CIDR blocks to allow to commuicate with the Route53 Resolver Endpoint. Defaults 0.0.0.0/0."
+  type = list(string)
+  default = ["0.0.0.0/0"]
+}
+
+variable "route53_resolver_endpoint_subnet" {
+  description = "Optional : The subnet to install Route53 Resolver Endpoint , the default is mgt but must exist as a key in the variable subnets."
+  type = list(string)
+  default = ["mgt"]
+}
+
 variable "instance_tenancy" {
   type        = string
   description = "Optional : A tenancy option for instances launched into the VPC."
@@ -175,7 +193,7 @@ variable "enable-dynamodb-endpoint" {
 }
 
 variable "private_endpoints_subnet" {
-  description = "The subnet to install private endpoints, the default is mgt."
+  description = "Optional : The subnet to install private endpoints, the default is mgt."
   default = "mgt"
 }
 

@@ -21,3 +21,58 @@ resource "aws_route53_resolver_rule_association" "r53_resolver_rule_association"
   resolver_rule_id = element(flatten(data.aws_route53_resolver_rules.shared_resolver_rule.*.resolver_rule_ids), count.index)
   vpc_id           = aws_vpc.main_vpc.id
 }
+
+resource "aws_security_group" "sg-r53ept-inbound" {
+  count       = var.route53_resolver_endpoint ? 1 : 0
+  name        = "sg-r53ept-inbound-${var.name-vars["account"]}-${replace(var.region,"-", "")}-${var.name-vars["name"]}"
+  description = "Allows access to the Route52 Resolver Endpoiny"
+  vpc_id      = aws_vpc.main_vpc.id
+
+  ingress {
+    from_port = 53
+    to_port   = 53
+    protocol  = tcp
+    cidr_blocks = var.route53_resolver_endpoint_cidr_blocks
+  }
+
+  ingress {
+    from_port = 53
+    to_port   = 53
+    protocol  = udp
+    cidr_blocks = var.route53_resolver_endpoint_cidr_blocks
+  }
+ 
+  egress {
+    description = "Allow all outbound"
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  
+  tags = merge(
+    var.tags,
+    map("Name",format("%s", "sg-r52ept-inbound-${var.name-vars["account"]}-${replace(var.region,"-", "")}-${var.name-vars["name"]}" )),
+    local.resource-tags["aws_route53_resolver_endpoint"]
+  )
+}
+
+resource "aws_route53_resolver_endpoint" "resolver_endpoint" {
+  count     = var.route53_resolver_endpoint ? 1 : 0
+  name      = "r53ept-inbound-${var.name-vars["account"]}-${replace(var.region,"-", "")}-${var.name-vars["name"]}"
+  direction = "INBOUND"
+  security_group_ids = aws_security_group.sg-r53ept-inbound.*.id
+
+  dynamic "ip_address" {
+    for_each = local.map_subnet_id_list[var.route53_resolver_endpoint_subnet]
+    content {
+      subnet_id = ip_address.value
+    }
+  }
+
+  tags = merge(
+    var.tags,
+    map("Name",format("%s", "sg-r52ept-inbound-${var.name-vars["account"]}-${replace(var.region,"-", "")}-${var.name-vars["name"]}" )),
+    local.resource-tags["aws_route53_resolver_endpoint"]
+  )
+}
