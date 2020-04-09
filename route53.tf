@@ -31,14 +31,14 @@ resource "aws_security_group" "sg-r53ept-inbound" {
   ingress {
     from_port = 53
     to_port   = 53
-    protocol  = tcp
+    protocol  = "tcp"
     cidr_blocks = var.route53_resolver_endpoint_cidr_blocks
   }
 
   ingress {
     from_port = 53
     to_port   = 53
-    protocol  = udp
+    protocol  = "udp"
     cidr_blocks = var.route53_resolver_endpoint_cidr_blocks
   }
  
