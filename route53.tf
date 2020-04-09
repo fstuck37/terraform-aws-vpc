@@ -61,7 +61,7 @@ resource "aws_route53_resolver_endpoint" "resolver_endpoint" {
   count     = var.route53_resolver_endpoint ? 1 : 0
   name      = "r53ept-inbound-${var.name-vars["account"]}-${replace(var.region,"-", "")}-${var.name-vars["name"]}"
   direction = "INBOUND"
-  security_group_ids = [aws_security_group.sg-r53ept-inbound.*.id]
+  security_group_ids = aws_security_group.sg-r53ept-inbound.*.id
 
   dynamic "ip_address" {
     for_each = local.map_subnet_id_list[var.route53_resolver_endpoint_subnet]
