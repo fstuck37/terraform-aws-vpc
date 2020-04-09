@@ -10,7 +10,7 @@ data "template_file" "subnet-24s-count" {
 
 data "template_file" "subnet-24s-test" {
   count    = length( local.route53-zones )
-  template = "${element(split(".",element(split("/", cidrsubnet(element(split("|",local.route53-zones), 1), (24 - element(split("/", element(split("|",local.route53-zones), 1)), 1)), element(split("|",local.route53-zones), 0))),0)),2)}.${element(split(".",element(split("/", cidrsubnet(element(split("|",local.route53-zones), 1), (24 - element(split("/", element(split("|",local.route53-zones), 1)), 1)), element(split("|",local.route53-zones), 0))),0)),1)}.${element(split(".",element(split("/", cidrsubnet(element(split("|",local.route53-zones), 1), (24 - element(split("/", element(split("|",local.route53-zones), 1)), 1)), element(split("|",local.route53-zones), 0))),0)),0)}.in-addr.arpa"
+  template = element(split(".",element(split("/", cidrsubnet(element(split("|",local.route53-zones), 1), (24 - element(split("/", element(split("|",local.route53-zones), 1)), 1)), element(split("|",local.route53-zones), 0))),0)),2)
 }
 
 
