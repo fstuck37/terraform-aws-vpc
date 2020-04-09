@@ -24,7 +24,7 @@ resource "aws_route53_resolver_rule_association" "r53_resolver_rule_association"
 
 resource "aws_security_group" "sg-r53ept-inbound" {
   count       = var.route53_resolver_endpoint ? 1 : 0
-  name        = "sg-r53ept-inbound-${var.name-vars["account"]}-${replace(var.region,"-", "")}-${var.name-vars["name"]}"
+  name        = "r53ept-inbound-${var.name-vars["account"]}-${replace(var.region,"-", "")}-${var.name-vars["name"]}"
   description = "Allows access to the Route52 Resolver Endpoiny"
   vpc_id      = aws_vpc.main_vpc.id
 
