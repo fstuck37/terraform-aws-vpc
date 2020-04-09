@@ -1,9 +1,7 @@
 data "template_file" "subnet-zone-size" {
   count    = length(vpc_cidrs)
-  template = pow(2,(24 - element(split("/", var.vpc_cidrs[count.index]) + (count.index==0 ? 0 : data.template_file.subnet-zone-size[count.index-1])
+  template = pow(2,(24 - element(split("/", var.vpc_cidrs[count.index]) + (count.index==0 ? 0 : data.template_file.subnet-zone-size.*.rendered[count.index-1])
 }
-
-
 
 
 /*
