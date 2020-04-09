@@ -21,8 +21,16 @@ data "aws_route53_resolver_rules" "shared_resolver_rule"{
   share_status = "SHARED_WITH_ME"
 }
 
+
+data "template_file" "route53-test" {
+  template = "${element(data.aws_route53_resolver_rules.shared_resolver_rule.*.resolver_rule_ids, count.index)}"
+}
+
+
+/*
 resource "aws_route53_resolver_rule_association" "r53_resolver_rule_association"{
   count            = var.shared_resolver_rule ? length(data.aws_route53_resolver_rules.shared_resolver_rule.*.resolver_rule_ids) : 0
   resolver_rule_id = "${element(data.aws_route53_resolver_rules.shared_resolver_rule.*.resolver_rule_ids, count.index)}"
   vpc_id           = aws_vpc.main_vpc.id
 }
+*/
