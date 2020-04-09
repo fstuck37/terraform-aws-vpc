@@ -22,7 +22,7 @@ data "aws_route53_resolver_rules" "shared_resolver_rule"{
 }
 
 resource "aws_route53_resolver_rule_association" "rule_association_0"{
-  count            = var.shared_resolver_rule ? length(data.aws_route53_resolver_rules.shared_resolver_rule.resolver_rule_ids) : 0
-  resolver_rule_id = element(data.aws_route53_resolver_rules.shared_resolver_rule.resolver_rule_ids, count.index)
+  count            = var.shared_resolver_rule ? length(data.aws_route53_resolver_rules.shared_resolver_rule.*.resolver_rule_ids) : 0
+  resolver_rule_id = element(data.aws_route53_resolver_rules.shared_resolver_rule.*.resolver_rule_ids, count.index)
   vpc_id           = aws_vpc.main_vpc.id
 }
