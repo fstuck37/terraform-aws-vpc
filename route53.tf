@@ -1,4 +1,4 @@
-sdata "template_file" "subnet-24s-lists" {
+data "template_file" "subnet-24s-lists" {
   count    = length(var.vpc-cidrs)
   template = replace(join(",", slice(local.basecount, 0, data.template_file.subnet-24s-count.*.rendered[count.index])), "A", var.vpc-cidrs[count.index])
 }
