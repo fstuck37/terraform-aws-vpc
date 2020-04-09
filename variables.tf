@@ -53,6 +53,16 @@ variable "enable_dns_hostnames" {
   default     = true
 }
 
+variable "default_reverse_zones" {
+  description = "Optional : Deploy Route53 Reverse Lookup Zones as /24s. Defaults to false"
+  default     = false
+}
+
+variable "shared_resolver_rule" {
+  description = "Optional : Deploy Route53 resolver rules. Defaults to false"
+  default     = false
+}
+
 variable "instance_tenancy" {
   type        = string
   description = "Optional : A tenancy option for instances launched into the VPC."
