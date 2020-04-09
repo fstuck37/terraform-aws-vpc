@@ -70,15 +70,15 @@ variable "route53_resolver_endpoint" {
 }
 
 variable "route53_resolver_endpoint_cidr_blocks" {
-  description = "Optional : A list of the source CIDR blocks to allow to commuicate with the Route53 Resolver Endpoint. Defaults 0.0.0.0/0."
   type = list(string)
+  description = "Optional : A list of the source CIDR blocks to allow to commuicate with the Route53 Resolver Endpoint. Defaults 0.0.0.0/0."
   default = ["0.0.0.0/0"]
 }
 
 variable "route53_resolver_endpoint_subnet" {
+  type = string
   description = "Optional : The subnet to install Route53 Resolver Endpoint , the default is mgt but must exist as a key in the variable subnets."
-  type = list(string)
-  default = ["mgt"]
+  default = "mgt"
 }
 
 variable "instance_tenancy" {
