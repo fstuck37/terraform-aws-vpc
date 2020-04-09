@@ -1,14 +1,8 @@
 data "template_file" "subnet-24s-lists" {
   count    = length(var.vpc-cidrs)
-#  template = replace(join(",", slice(local.basecount, 0, data.template_file.subnet-24s-count.*.rendered[count.index])), "A", var.vpc-cidrs[count.index])
   template = replace(join(",", slice(local.basecount, 0, pow(2,(24 - element(split("/", var.vpc-cidrs[count.index]), 1))))), "A", var.vpc-cidrs[count.index])
 }
-/*
-data "template_file" "subnet-24s-count" {
-  count    = length(var.vpc-cidrs)
-  template = pow(2,(24 - element(split("/", var.vpc-cidrs[count.index]), 1)))
-}
-*/
+
 resource "aws_route53_zone" "reverse_zones" {
   count = var.default_reverse_zones ? length( local.route53-zones ) : 0
   name = "${element(split(".",element(split("/", cidrsubnet(element(split("|",local.route53-zones[count.index]), 1), (24 - element(split("/", element(split("|",local.route53-zones[count.index]), 1)), 1)), element(split("|",local.route53-zones[count.index]), 0))),0)),2)}.${element(split(".",element(split("/", cidrsubnet(element(split("|",local.route53-zones[count.index]), 1), (24 - element(split("/", element(split("|",local.route53-zones[count.index]), 1)), 1)), element(split("|",local.route53-zones[count.index]), 0))),0)),1)}.${element(split(".",element(split("/", cidrsubnet(element(split("|",local.route53-zones[count.index]), 1), (24 - element(split("/", element(split("|",local.route53-zones[count.index]), 1)), 1)), element(split("|",local.route53-zones[count.index]), 0))),0)),0)}.in-addr.arpa"
