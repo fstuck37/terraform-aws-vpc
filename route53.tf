@@ -8,9 +8,14 @@ data "template_file" "subnet-24s-count" {
   template = pow(2,(24 - element(split("/", var.vpc-cidrs[count.index]), 1)))
 }
 
-data "template_file" "subnet-24s-test" {
+data "template_file" "subnet-24s-testi" {
   count    = length( local.route53-zones )
-  template = element(split(".",element(split("/", cidrsubnet(element(split("|",local.route53-zones[count.index]), 1), (24 - element(split("/", element(split("|",local.route53-zones[count.index]), 1)), 1)), element(split("|",local.route53-zones[count.index]), 0))),0)),2)
+  template = element(split("|",local.route53-zones[count.index]), 0)
+}
+
+data "template_file" "subnet-24s-testc" {
+  count    = length( local.route53-zones )
+  template = element(split("|",local.route53-zones[count.index]), 1)
 }
 
 
