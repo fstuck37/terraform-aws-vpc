@@ -19,7 +19,10 @@ locals {
   subnets-size = length(var.subnets)
   azs-list = split(",", join(",", data.template_file.azs-two.*.rendered))
   subnets-list = (split(",", join(",", data.template_file.subnets-two.*.rendered)))
-  
+
+
+  route53-zones = length( split(",", join(",", data.template_file.azs-two.*.rendered))   )
+
   peerlink-size = length(var.peer_requester)
   routetable-size = length(var.zones[var.region])
   peerlink-list = split(",", join(",", data.template_file.peerlink-two.*.rendered))
