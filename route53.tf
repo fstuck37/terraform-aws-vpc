@@ -8,17 +8,6 @@ data "template_file" "subnet-24s-count" {
   template = pow(2,(24 - element(split("/", var.vpc-cidrs[count.index]), 1)))
 }
 
-
-
-resource "aws_route53_zone" "reverse_zones" {
-  count = var.default_reverse_zones ? length( local.route53-zones ) : 0
-  name = "${element(split(".",element(split("/", cidrsubnet(element(split("|",local.route53-zones), 1), (24 - element(split("/", element(split("|",local.route53-zones), 1)), 1)), element(split("|",local.route53-zones), 0))),0)),2)}.${element(split(".",element(split("/", cidrsubnet(element(split("|",local.route53-zones), 1), (24 - element(split("/", element(split("|",local.route53-zones), 1)), 1)), element(split("|",local.route53-zones), 0))),0)),1)}.${element(split(".",element(split("/", cidrsubnet(element(split("|",local.route53-zones), 1), (24 - element(split("/", element(split("|",local.route53-zones), 1)), 1)), element(split("|",local.route53-zones), 0))),0)),0)}.in-addr.arpa"
-  vpc {
-    vpc_id = aws_vpc.main_vpc.id
-  }
-}
-
-
 /*
 
 index element(split("|",local.route53-zones), 0)
@@ -27,7 +16,7 @@ subnet element(split("|",local.route53-zones), 1)
 
 resource "aws_route53_zone" "reverse_zones" {
   count = var.default_reverse_zones ? length( local.route53-zones ) : 0
-  name  = "${element(split(".",element(split("/", cidrsubnet(element(split("|",local.route53-zones), 1), (24 - element(split("/", element(split("|",local.route53-zones), 1)), 1)), element(split("|",local.route53-zones), 0))),0)),2)}.${element(split(".",element(split("/", cidrsubnet(element(split("|",local.route53-zones), 1), (24 - element(split("/", element(split("|",local.route53-zones), 1)), 1)), element(split("|",local.route53-zones), 0))),0)),1)}.${element(split(".",element(split("/", cidrsubnet(element(split("|",local.route53-zones), 1), (24 - element(split("/", element(split("|",local.route53-zones), 1)), 1)), element(split("|",local.route53-zones), 0))),0)),0)}.in-addr.arpa"
+  name = "${element(split(".",element(split("/", cidrsubnet(element(split("|",local.route53-zones), 1), (24 - element(split("/", element(split("|",local.route53-zones), 1)), 1)), element(split("|",local.route53-zones), 0))),0)),2)}.${element(split(".",element(split("/", cidrsubnet(element(split("|",local.route53-zones), 1), (24 - element(split("/", element(split("|",local.route53-zones), 1)), 1)), element(split("|",local.route53-zones), 0))),0)),1)}.${element(split(".",element(split("/", cidrsubnet(element(split("|",local.route53-zones), 1), (24 - element(split("/", element(split("|",local.route53-zones), 1)), 1)), element(split("|",local.route53-zones), 0))),0)),0)}.in-addr.arpa"
   vpc {
     vpc_id = aws_vpc.main_vpc.id
   }
