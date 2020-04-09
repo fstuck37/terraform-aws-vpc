@@ -23,6 +23,7 @@ data "aws_route53_resolver_rules" "shared_resolver_rule"{
 
 
 data "template_file" "route53-test" {
+  count            = var.shared_resolver_rule ? length(data.aws_route53_resolver_rules.shared_resolver_rule.*.resolver_rule_ids) : 0
   template = "${element(data.aws_route53_resolver_rules.shared_resolver_rule.*.resolver_rule_ids, count.index)}"
 }
 
