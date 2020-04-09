@@ -22,11 +22,9 @@ data "aws_route53_resolver_rules" "shared_resolver_rule"{
 }
 
 
-data "template_file" "route53-test" {
-  count            = var.shared_resolver_rule ? length(data.aws_route53_resolver_rules.shared_resolver_rule.*.resolver_rule_ids) : 0
-  template = "   ${data.aws_route53_resolver_rules.shared_resolver_rule.*.resolver_rule_ids[count.index]}"
+output "aws_route53_resolver_rules_ids" {
+  value = data.aws_route53_resolver_rules.shared_resolver_rule.*.resolver_rule_ids
 }
-
 
 /*
 resource "aws_route53_resolver_rule_association" "r53_resolver_rule_association"{
