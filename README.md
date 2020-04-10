@@ -118,6 +118,12 @@ Argument Reference
      default = ["pub", "web", "app", "db", "mgt"]
    }
    ```
+* **Route53 Options**
+   * **default_reverse_zones** - Optional : Deploy Route53 Reverse Lookup Zones as /24s. Defaults to false
+   * **shared_resolver_rule** - Optional : Deploy Route53 resolver rules. Defaults to false
+   * **route53_resolver_endpoint** - Optional : A boolean flag to enable/disable Route53 Resolver Endpoint. Defaults false.
+   * **route53_resolver_endpoint_cidr_blocks** - Optional : A list of the source CIDR blocks to allow to commuicate with the Route53 Resolver Endpoint. Defaults 0.0.0.0/0.
+   * **route53_resolver_endpoint_subnet** - Optional : The subnet to install Route53 Resolver Endpoint , the default is mgt but must exist as a key in the variable subnets.
 * **DHCP Options**
    * **domain_name** - Optional : DNS search domains for DHCP Options
    * **domain_name_servers** - Optional : DNS Servers for DHCP Options
