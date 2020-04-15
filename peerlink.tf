@@ -37,8 +37,9 @@ resource "aws_vpc_peering_connection" "peer" {
 resource "aws_route" "requester_routes" {
   count                     = (local.peerlink-size * local.routetable-size) > 0 ? local.peerlink-size * local.routetable-size : 0
   route_table_id            = aws_route_table.privrt.*.id[local.routetable-list[count.index]]
-  destination_cidr_block    = element(split("|", var.peer_requester[element(keys(var.peer_requester),local.peerlink-list[count.index])]),2)
-  vpc_peering_connection_id = aws_vpc_peering_connection.peer.*.id[local.peerlink-list[count.index]]
+  for_each                  = var.peer_requester
+  destination_cidr_block    = element(split("|", each.value),2)
+  vpc_peering_connection_id = aws_vpc_peering_connection.peer.each.key.id
 }
 
 
@@ -49,9 +50,12 @@ resource "aws_vpc_peering_connection_accepter" "peer" {
   tags                      = merge(var.tags, map("Name", "${each.key}-peerlink"))
 }
 
+
 resource "aws_route" "accepter_routes" {
-  count                     = (local.peerlink-accepter-size * local.routetable-size) > 0 ? local.peerlink-accepter-size * local.routetable-size : 0
-  route_table_id            = aws_route_table.privrt.*.id[local.routetable-accepter-list[count.index]]
-  destination_cidr_block    = element(split("|", var.peer_accepter[element(keys(var.peer_accepter),local.peerlink-accepter-list[count.index])]),1)
-  vpc_peering_connection_id = element(split("|", var.peer_accepter[element(keys(var.peer_accepter),local.peerlink-accepter-list[count.index])]),0)
+  accepter_routes = { for ep in local.accepter_routes : "${ep.route_table}/${ep.conn_id}/${ep.cidr}" => {
+    route_table_id              = ep.route_table
+    vpc_peering_connection_id   = ep.conn_id
+    destination_cidr_block      = ep.cidr
+    }
+  }
 }
