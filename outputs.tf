@@ -38,12 +38,15 @@ output "vgw_id" {
 #   value = length(keys(var.peer_requester)) == length(aws_vpc_peering_connection.peer.*.id) ? zipmap(keys(var.peer_requester), aws_vpc_peering_connection.peer.*.id) : {}
 # }
 
-output "peerlink_accepters" {
-  value = zipmap([for v in aws_vpc_peering_connection_accepter.peer : v.tags.Name], [for v in aws_vpc_peering_connection.peer : v.id])
-}
-
-output "peerlink_requesters" {
-  value = zipmap([for v in aws_vpc_peering_connection.peer : v.tags.Name], [for v in aws_vpc_peering_connection.peer : v.id])
+output "peerlink_ids" {
+  value = merge(
+    zipmap(
+      [for v in aws_vpc_peering_connection_accepter.peer : v.tags.Name],
+      [for v in aws_vpc_peering_connection_accepter.peer : v.id]),
+    zipmap(
+      [for v in aws_vpc_peering_connection.peer : v.tags.Name],
+      [for v in aws_vpc_peering_connection.peer : v.id]
+    ))
 }
 
 output "aws_ec2_transit_gateway_vpc_attachment" {
