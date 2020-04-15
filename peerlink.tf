@@ -49,9 +49,9 @@ resource "aws_route" "accepter_routes" {
   vpc_peering_connection_id = each.value.conn_id
 }
 
-resource "aws_route" "requester_routes" {
-  for_each                  = {for route in local.peerlink_requester_routes : route.name => route}
-  route_table_id            = each.value.route_table
-  destination_cidr_block    = each.value.cidr
-  vpc_peering_connection_id = aws_vpc_peering_connection.peer[each.value.name].id
-}
+# resource "aws_route" "requester_routes" {
+#   for_each                  = {for route in local.peerlink_requester_routes : route.name => route}
+#   route_table_id            = each.value.route_table
+#   destination_cidr_block    = each.value.cidr
+#   vpc_peering_connection_id = aws_vpc_peering_connection.peer[each.value.name].id
+# }
