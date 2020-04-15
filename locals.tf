@@ -16,10 +16,7 @@ locals {
       name            = "${rt.id}-${element(split("|", value),1)}"
       peer_link_name  = key
       route_table     = rt.id
-      account         = element(split("|", value),0)
-      vpc_id          = element(split("|", value),1)
       cidr            = element(split("|", value),2)
-      dns_resolution  = element(split("|", value),3)
       }
     ]
   ])
