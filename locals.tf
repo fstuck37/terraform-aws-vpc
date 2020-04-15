@@ -1,14 +1,4 @@
 locals {
-  peerlink_accepter_routes = flatten([
-  for key, value in aws_route_table.privrt : [
-    for k, v in var.peer_accepter : {
-      route_table = value.id
-      conn_id     = element(split("|", v),0)
-      cidr        = element(split("|", v),1)
-      }
-    ]
-  ])
-
   num-availbility-zones = "${length(var.zones[var.region])}"
   subnet-order = coalescelist( var.subnet-order, keys(var.subnets))
 

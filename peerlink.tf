@@ -52,10 +52,8 @@ resource "aws_vpc_peering_connection_accepter" "peer" {
 
 
 resource "aws_route" "accepter_routes" {
-  accepter_routes = { for ep in local.accepter_routes : "${ep.route_table}/${ep.conn_id}/${ep.cidr}" => {
-    route_table_id              = ep.route_table
-    vpc_peering_connection_id   = ep.conn_id
-    destination_cidr_block      = ep.cidr
-    }
-  }
+  route_table_id            = [ for rt in aws_route_table.privrt : rt.id ]
+  for_each                  = var.peer_accepter
+  destination_cidr_block    = element(split("|", each.value),1)
+  vpc_peering_connection_id = element(split("|", each.value),0)
 }
