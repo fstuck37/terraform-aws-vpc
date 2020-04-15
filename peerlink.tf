@@ -11,27 +11,27 @@
 ##################################################
 
 resource "aws_vpc_peering_connection" "peer" {
-  count         = length(var.peer_requester)
+  for_each      = var.peer_requester
   vpc_id        = aws_vpc.main_vpc.id
-  peer_vpc_id   = element(split("|", var.peer_requester[element(keys(var.peer_requester),count.index)]),1)
-  peer_owner_id = element(split("|", var.peer_requester[element(keys(var.peer_requester),count.index)]),0)
-  auto_accept   = var.acctnum == element(split("|", var.peer_requester[element(keys(var.peer_requester),count.index)]),0) ? true : false
+  peer_vpc_id   = element(split("|", each.value),1)
+  peer_owner_id = element(split("|", each.value),0)
+  auto_accept   = var.acctnum == element(split("|", each.value),0) ? true : false
 
-/*
-  accepter {
-    allow_classic_link_to_remote_vpc = false
-    allow_remote_vpc_dns_resolution  = element(split("|", var.peer_requester[element(keys(var.peer_requester),count.index)]),3)
-    allow_vpc_to_remote_classic_link = false
-  }
-*/
+# /*
+#   accepter {
+#     allow_classic_link_to_remote_vpc = false
+#     allow_remote_vpc_dns_resolution  = element(split("|", var.peer_requester[element(keys(var.peer_requester),count.index)]),3)
+#     allow_vpc_to_remote_classic_link = false
+#   }
+# */
 
   requester {
     allow_classic_link_to_remote_vpc = false
-    allow_remote_vpc_dns_resolution  = element(split("|", var.peer_requester[element(keys(var.peer_requester),count.index)]),3)
+    allow_remote_vpc_dns_resolution  = element(split("|", each.value),3)
     allow_vpc_to_remote_classic_link = false
   }
 
-  tags = merge(var.tags, map("Name", format("%s", "${element(keys(var.peer_requester),count.index)}-peerlink")))
+  tags = merge(var.tags, map("Name", "${each.key}-peerlink"))
 }
 
 resource "aws_route" "requester_routes" {
@@ -43,10 +43,10 @@ resource "aws_route" "requester_routes" {
 
 
 resource "aws_vpc_peering_connection_accepter" "peer" {
-  count                     = length(var.peer_accepter)
-  vpc_peering_connection_id = element(split("|", var.peer_accepter[element(keys(var.peer_accepter),count.index)]),0)
+  for_each                  = var.peer_accepter
+  vpc_peering_connection_id = element(split("|", each.value),0)
   auto_accept               = true
-  tags                      = merge(var.tags, map("Name", format("%s", "${element(keys(var.peer_accepter),count.index)}-peerlink")))
+  tags                      = merge(var.tags, map("Name", "${each.key}-peerlink"))
 }
 
 resource "aws_route" "accepter_routes" {
