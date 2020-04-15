@@ -65,9 +65,9 @@ resource "aws_route" "accepter_routes" {
 #   vpc_peering_connection_id = aws_vpc_peering_connection.peer.*.id[local.peerlink-list[count.index]]
 # }
 
-resource "aws_route" "accepter_routes" {
-  route_table_id            = aws_route_table.privrt.*.id[local.routetable-list[count.index]]
-  for_each                  = var.peer_accepter
-  destination_cidr_block    = element(split("|", each.value),1)
-  vpc_peering_connection_id = element(split("|", each.value),0)
-}
+# resource "aws_route" "accepter_routes" {
+#   route_table_id            = aws_route_table.privrt.*.id[local.routetable-list[count.index]]
+#   for_each                  = var.peer_accepter
+#   destination_cidr_block    = element(split("|", each.value),1)
+#   vpc_peering_connection_id = element(split("|", each.value),0)
+# }
