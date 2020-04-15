@@ -34,13 +34,13 @@ resource "aws_vpc_peering_connection" "peer" {
   tags = merge(var.tags, map("Name", "${each.key}-peerlink"))
 }
 
-resource "aws_route" "requester_routes" {
-  count                     = (local.peerlink-size * local.routetable-size) > 0 ? local.peerlink-size * local.routetable-size : 0
-  route_table_id            = aws_route_table.privrt.*.id[local.routetable-list[count.index]]
-  for_each                  = var.peer_requester
-  destination_cidr_block    = element(split("|", each.value),2)
-  vpc_peering_connection_id = aws_vpc_peering_connection.peer.each.key.id
-}
+# resource "aws_route" "requester_routes" {
+#   count                     = (local.peerlink-size * local.routetable-size) > 0 ? local.peerlink-size * local.routetable-size : 0
+#   route_table_id            = aws_route_table.privrt.*.id[local.routetable-list[count.index]]
+#   for_each                  = var.peer_requester
+#   destination_cidr_block    = element(split("|", each.value),2)
+#   vpc_peering_connection_id = aws_vpc_peering_connection.peer.each.key.id
+# }
 
 
 resource "aws_vpc_peering_connection_accepter" "peer" {
