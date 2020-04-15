@@ -52,12 +52,11 @@ resource "aws_vpc_peering_connection_accepter" "peer" {
 
 
 resource "aws_route" "accepter_routes" {
-  for_each                  = { for route in local.peerlink_accepter_routes : route.route_table => route
+  for_each                  = { for route in local.peerlink_accepter_routes : route.route_table => route}
   # for_each                  = toset(local.peerlink_accepter_routes)
   route_table_id            = each.value.route_table
   destination_cidr_block    = each.value.cidr
   vpc_peering_connection_id = each.value.conn_id
-  }
 }
 
 # resource "aws_route" "requester_routes" {
