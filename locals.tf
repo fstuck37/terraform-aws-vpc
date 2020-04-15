@@ -4,8 +4,8 @@ locals {
     for key, value in var.peer_accepter : {
       name        = "${rt.id}-${element(split("|", value),1)}" 
       route_table = rt.id
-      conn_id     = element(split("|", value),2)
-      cidr        = element(split("|", value),1)
+      conn_id     = element(split("|", value),1)
+      cidr        = element(split("|", value),2)
       }
     ]
   ])
