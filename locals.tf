@@ -1,10 +1,10 @@
 locals {
   peerlink_accepter_routes = flatten([
-  for key, value in aws_route_table.privrt : [
-    for k, v in var.peer_accepter : {
+  for rt in aws_route_table.privrt : [
+    for key, value in var.peer_accepter : {
       route_table = value.id
-      conn_id     = element(split("|", each.value),2)
-      cidr        = element(split("|", each.value),1)
+      conn_id     = element(split("|", value),2)
+      cidr        = element(split("|", value),1)
       }
     ]
   ])
