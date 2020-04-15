@@ -10,6 +10,19 @@ locals {
     ]
   ])
 
+  peerlink_requester_routes = flatten([
+  for rt in aws_route_table.privrt : [
+    for key, value in var.peer_requester : {
+      name            = "${rt.id}-${element(split("|", value),2)}" 
+      route_table     = rt.id
+      account         = element(split("|", value),1)
+      vpc_id          = element(split("|", value),2)
+      cidr            = element(split("|", value),3)
+      dns_resolution  = element(split("|", value),4)
+      }
+    ]
+  ])
+
   num-availbility-zones = "${length(var.zones[var.region])}"
   subnet-order = coalescelist( var.subnet-order, keys(var.subnets))
 

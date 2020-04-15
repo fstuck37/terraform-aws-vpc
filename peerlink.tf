@@ -34,15 +34,6 @@ resource "aws_vpc_peering_connection" "peer" {
   tags = merge(var.tags, map("Name", "${each.key}-peerlink"))
 }
 
-# resource "aws_route" "requester_routes" {
-#   count                     = (local.peerlink-size * local.routetable-size) > 0 ? local.peerlink-size * local.routetable-size : 0
-#   route_table_id            = aws_route_table.privrt.*.id[local.routetable-list[count.index]]
-#   for_each                  = var.peer_requester
-#   destination_cidr_block    = element(split("|", each.value),2)
-#   vpc_peering_connection_id = aws_vpc_peering_connection.peer.each.key.id
-# }
-
-
 resource "aws_vpc_peering_connection_accepter" "peer" {
   for_each                  = var.peer_accepter
   vpc_peering_connection_id = element(split("|", each.value),0)
@@ -52,23 +43,15 @@ resource "aws_vpc_peering_connection_accepter" "peer" {
 
 
 resource "aws_route" "accepter_routes" {
-  for_each                  = { for route in local.peerlink_accepter_routes : route.name => route}
-  # for_each                  = toset(local.peerlink_accepter_routes)
+  for_each                  = {for route in local.peerlink_accepter_routes : route.name => route}
   route_table_id            = each.value.route_table
   destination_cidr_block    = each.value.cidr
   vpc_peering_connection_id = each.value.conn_id
 }
 
-# resource "aws_route" "requester_routes" {
-#   count                     = (local.peerlink-size * local.routetable-size) > 0 ? local.peerlink-size * local.routetable-size : 0
-#   route_table_id            = aws_route_table.privrt.*.id[local.routetable-list[count.index]]
-#   destination_cidr_block    = element(split("|", var.peer_requester[element(keys(var.peer_requester),local.peerlink-list[count.index])]),2)
-#   vpc_peering_connection_id = aws_vpc_peering_connection.peer.*.id[local.peerlink-list[count.index]]
-# }
-
-# resource "aws_route" "accepter_routes" {
-#   route_table_id            = aws_route_table.privrt.*.id[local.routetable-list[count.index]]
-#   for_each                  = var.peer_accepter
-#   destination_cidr_block    = element(split("|", each.value),1)
-#   vpc_peering_connection_id = element(split("|", each.value),0)
-# }
+resource "aws_route" "requester_routes" {
+  for_each                  = {for route in local.peerlink_requester_routes : route.name => route}
+  route_table_id            = each.value.route_table
+  destination_cidr_block    = each.value.cidr
+  vpc_peering_connection_id = aws_vpc_peering_connection.peer.each.value.name.id
+}
