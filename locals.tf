@@ -13,8 +13,7 @@ locals {
   peerlink_requester_routes = flatten([
   for rt in aws_route_table.privrt : [
     for key, value in var.peer_requester : {
-      peer_link_id    = aws_vpc_peering_connection.peer[key].id
-      name            = "${rt.id}-${peer_link_id}"
+      name            = "${rt.id}-${aws_vpc_peering_connection.peer[key].id}"
       peer_link_name  = key
       route_table     = rt.id
       cidr            = element(split("|", value),2)
