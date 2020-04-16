@@ -1,4 +1,26 @@
 locals {
+  peerlink_accepter_routes = flatten([
+  for rt in aws_route_table.privrt : [
+    for key, value in var.peer_accepter : {
+      name        = "${rt.id}-${replace(replace(element(split("|", value),1), "." , "-"), "/", "-")}" 
+      route_table = rt.id
+      conn_id     = element(split("|", value),0)
+      cidr        = element(split("|", value),1)
+      }
+    ]
+  ])
+
+  peerlink_requester_routes = flatten([
+  for rt in aws_route_table.privrt : [
+    for key, value in var.peer_requester : {
+      name            = "${rt.id}-${replace(replace(element(split("|", value),2), "." , "-"), "/", "-")}" 
+      peer_link_name  = key
+      route_table     = rt.id
+      cidr            = element(split("|", value),2)
+      }
+    ]
+  ])
+
   num-availbility-zones = "${length(var.zones[var.region])}"
   subnet-order = coalescelist( var.subnet-order, keys(var.subnets))
 
