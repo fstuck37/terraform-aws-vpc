@@ -25,14 +25,22 @@ resource "aws_vpc_endpoint" "private-dynamodb" {
    route_table_ids = aws_route_table.privrt.*.id
 }
 
+# resource "aws_vpc_endpoint" "private-interface-endpoints" {
+#    count              = length(var.private_endpoints)
+#    vpc_id             = aws_vpc.main_vpc.id
+#    service_name       = replace(var.private_endpoints[count.index], "<REGION>", var.region)
+#    vpc_endpoint_type  = "Interface"
+#    subnet_ids         = zipmap(var.subnet-order, chunklist(aws_subnet.subnets.*.id, local.num-availbility-zones))[var.private_endpoints_subnet]
+#    security_group_ids = compact(split("|", var.private_endpoints_security_group[count.index]))
+# }
+
 resource "aws_vpc_endpoint" "private-interface-endpoints" {
-   count              = length(var.private_endpoints)
-   vpc_id             = aws_vpc.main_vpc.id
-   service_name       = replace(var.private_endpoints[count.index], "<REGION>", var.region)
-   vpc_endpoint_type  = "Interface"
-   subnet_ids         = zipmap(var.subnet-order, chunklist(aws_subnet.subnets.*.id, local.num-availbility-zones))[var.private_endpoints_subnet]
-   security_group_ids = compact(split("|", var.private_endpoints_security_group[count.index]))
+  for_each                  = {for endpoint in var.private_endpoints : endpoint.name => endpoint.name}
+  vpc_id                    = aws_vpc.main_vpc.id
+  service_name              = replace(each.value.endpoint, "<REGION>", var.region)
+  vpc_endpoint_type         = "Interface"
+  subnet_ids                = zipmap(var.subnet-order, chunklist(aws_subnet.subnets.*.id, local.num-availbility-zones))[each.value.subnet]
+  security_group_ids        = compact(split("|", each.value.security_group))
+  tags                      = merge(var.tags, map("Name", "${each.value.name}"))
 }
-
-
 
