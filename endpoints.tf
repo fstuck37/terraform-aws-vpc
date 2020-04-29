@@ -37,7 +37,7 @@ resource "aws_vpc_endpoint" "private-dynamodb" {
 resource "aws_vpc_endpoint" "private-interface-endpoints" {
   for_each                  = {for endpoint in var.private_endpoints : endpoint.name => endpoint.name}
   vpc_id                    = aws_vpc.main_vpc.id
-  service_name              = replace(each.value.endpoint, "<REGION>", var.region)
+  service_name              = replace(each.value.service, "<REGION>", var.region)
   vpc_endpoint_type         = "Interface"
   subnet_ids                = zipmap(var.subnet-order, chunklist(aws_subnet.subnets.*.id, local.num-availbility-zones))[each.value.subnet]
   security_group_ids        = compact(split("|", each.value.security_group))
