@@ -140,9 +140,6 @@ Argument Reference
    * **enable-s3-endpoint** - Optional : Enable the S3 Endpoint, default is false
    * **enable-dynamodb-endpoint** - Optional : Enable the DynamoDB Endpoint, default is false
    * **private_endpoints** - Optional : List of Maps for private AWS Endpoints - <REGION> will be replace with the region of the VPC. This helps standardize inputs between VPCs for example you can send com.amazonaws.<REGION>.cloudformation for a cloudformation endpoint. The keys for the maps are as follows: name[Name of Resource], subnet[Name of the subnet group for the Endpoint], service[<REGION> will be replace with the region of the VPC.], security_group[sgid of the sg to apply, if more than one is needed they should be | delimited]
-IE:
-variable "private_endpoints" {
-  description = "List of Maps for private AWS Endpoints Keys for Map are name[Name of Resource], subnet[Name of the subnet group for the Endpoint], service[<REGION> will be replace with the region of the VPC.], security_group[sgid of the sg to apply, if more than one is needed they should be | delimited].
     ```
     variable "private_endpoints" {
      default = [
@@ -156,7 +153,7 @@ variable "private_endpoints" {
             name = "execute-api-endpoint"
             subnet = "app"
             service = "com.amazonaws.<REGION>.execute-api"
-            security_group = "sg-123456789"
+            security_group = "sg-123456789|sg-987654321"
         }
       ]
     }
