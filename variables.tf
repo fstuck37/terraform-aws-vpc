@@ -102,7 +102,13 @@ variable "subnets" {
 
 variable "fixed-subnets" {
   type = map(list(string))
-  description = "Optional : Keys are used for subnet names and values are the list of subnets for each AZ. The number of subnets specified in each list needs to match the number of AZs. 'pub' is the only special name used for the public subnet and must be specified first."
+  description = "Optional : Keys must match subnet-order and values are the list of subnets for each AZ. The number of subnets specified in each list needs to match the number of AZs. 'pub' is the only special name used."
+  default = { }
+}
+
+variable "fixed-name" {
+  type = map(list(string))
+  description = "Optional : Keys must match subnet-order and values are the name of subnets for each AZ. The number of subnets specified in each list needs to match the number of AZs. 'pub' is the only special name used."
   default = { }
 }
 
