@@ -192,18 +192,8 @@ variable "enable-dynamodb-endpoint" {
   default     = false
 }
 
-variable "private_endpoints_subnet" {
-  description = "Optional : The subnet to install private endpoints, the default is mgt."
-  default = "mgt"
-}
-
 variable "private_endpoints" {
-  description = "List of private AWS Endpoints - <REGION> will be replace with the region of the VPC. This helps standardize inputs between VPCs for example you can send com.amazonaws.<REGION>.cloudformation for a cloudformation endpoint."
-  default = []
-}
-
-variable "private_endpoints_security_group" {
-  description = "List of security groups IDs to apply to each AWS Endpoint. The list should be the same length as private_endpoints. If multiple security are required for an individual endpoint delemit each with a pipe (|)."
+description = "List of Maps for private AWS Endpoints Keys: name[Name of Resource IE: s3-endpoint], subnet[Name of the subnet group for the Endpoint IE: web], service[The Service IE: com.amazonaws.<REGION>.execute-api, <REGION> will be replaced with VPC Region], security_group[sg id to apply, if more than one is needed they should be | delimited]"
   default = []
 }
 

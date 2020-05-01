@@ -139,9 +139,25 @@ Argument Reference
    * **dx_gateway_id** - Optional : specify the Direct Connect Gateway ID to associate the VGW with.
    * **enable-s3-endpoint** - Optional : Enable the S3 Endpoint, default is false
    * **enable-dynamodb-endpoint** - Optional : Enable the DynamoDB Endpoint, default is false
-   * **private_endpoints_subnet** - Optional : The subnet to install private endpoints. The value must exist in subnet-order.
-   * **private_endpoints** - Optional : List of private AWS Endpoints - <REGION> will be replace with the region of the VPC. This helps standardize inputs between VPCs for example you can send com.amazonaws.<REGION>.cloudformation for a cloudformation endpoint.
-   * **private_endpoints_security_group** - Optional : List of security groups IDs to apply to each AWS Endpoint. The list should be the same length as private_endpoints. If multiple security groups are required for an individual endpoint delemit each with a pipe (|).
+   * **private_endpoints** - Optional : List of Maps for private AWS Endpoints - `<REGION>` will be replace with the region of the VPC. This helps standardize inputs between VPCs for example you can send com.amazonaws.<REGION>.cloudformation for a cloudformation endpoint. The keys for the maps are as follows: name[Name of Resource], subnet[Name of the subnet group for the Endpoint], service[<REGION> will be replace with the region of the VPC.], security_group[sgid of the sg to apply, if more than one is needed they should be | delimited]
+    ```
+    variable "private_endpoints" {
+     default = [
+        {
+            name = "storage-gateway-endpoint"
+            subnet = "mgt" 
+            service = "com.amazonaws.<REGION>.storagegateway"
+            security_group = "sg-123456789"
+        },
+        {
+            name = "execute-api-endpoint"
+            subnet = "app"
+            service = "com.amazonaws.<REGION>.execute-api"
+            security_group = "sg-123456789|sg-987654321"
+        }
+      ]
+    }
+    ```
    * **deploy_natgateways** - Optional : Set to true to deploy NAT gateways if pub subnet is created
    * **peer_requester** - Optional : Map of Peer Link Name with a value of [Peer AWS Account Number]|[Peer VPC_ID]|[Peer VPC CIDR]|[allow_remote_vpc_dns_resolution]. This only creates the requester half of the connection. Since maps our lexically prepend the VPC name with a alpha character so they flow alphabetically, for example a-peerlink1, b-peerlink2, etc.
    ```
@@ -171,7 +187,7 @@ Notes and Workarounds
 ------------
 A workaround to deleting subnets or peer links.
 terraform state mv <resource-name>.<resource-id>[<i>] <resource-name>.<resource-id>[<j>] 
-Move elements one at a time in the list, upwards or downwards depending on the values you set for i & j.
+Move elements one at a time in the list, upwards or downwards depending on the v5alues you set for i & j.
 
 Output Reference
 ------------
