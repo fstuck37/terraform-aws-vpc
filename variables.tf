@@ -170,11 +170,6 @@ variable "dx_bgp_default_route" {
   default     = false
 }
 
-variable "enable_pub_route_propagation" {
-  description = "Optional : A boolean flag that indicates that the routes should be propagated to the pub routing table. Defaults to False."
-  default     = false
-}
-
 variable "dx_gateway_id" {
   description = "Optional : specify the Direct Connect Gateway ID to associate the VGW with."
   default     = false

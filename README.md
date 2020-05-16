@@ -135,7 +135,6 @@ Argument Reference
    * **ingress_block** - Optional : CIDR blocks to block inbound
    * **egress_block** - Optional : CIDR blocks to block outbound
 * **DxGW, NAT Gateway, Endpoints, and Peer Links**
-   * **enable_pub_route_propagation** - Optional : A boolean flag that indicates that the routes should be propagated to the pub routing table. Defaults to False.
    * **dx_bgp_default_route** - Optional : A boolean flag that indicates that the default gateway will be advertised via BGP over Direct Connect and causes the script to not deploy NAT Gateways.
    * **dx_gateway_id** - Optional : specify the Direct Connect Gateway ID to associate the VGW with.
    * **enable-s3-endpoint** - Optional : Enable the S3 Endpoint, default is false
