@@ -23,7 +23,7 @@ resource "aws_route_table" "pubrt" {
 }
 
 resource "aws_vpn_gateway_route_propagation" "pubrt" {
-  count          = contains(keys(var.subnets), "pub") && enable_pub_route_propagation == true ? 1 : 0
+  count          = contains(keys(var.subnets), "pub") && var.enable_pub_route_propagation == true ? 1 : 0
   vpn_gateway_id = aws_vpn_gateway.vgw.id
   route_table_id = "${aws_route_table.pubrt.id}"
 }
