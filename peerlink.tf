@@ -31,13 +31,13 @@ resource "aws_vpc_peering_connection_accepter" "peer" {
   vpc_peering_connection_id = element(split("|", each.value),0)
   auto_accept               = true
 
-/*
+
  accepter {
    allow_classic_link_to_remote_vpc = false
-   allow_remote_vpc_dns_resolution  = element(split("|", each.value,count.index)]),3)
+   allow_remote_vpc_dns_resolution  = element(split("|", each.value),3)
    allow_vpc_to_remote_classic_link = false
  }
-*/
+
 
   tags                      = merge(var.tags, map("Name", "${each.key}-peerlink"))
 }
