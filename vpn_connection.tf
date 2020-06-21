@@ -1,5 +1,6 @@
 resource "aws_customer_gateway" "aws_customer_gateways" {
   for_each = var.vpc_connections
+    type = "ipsec.1"
     bgp_asn = each.value.bgp_asn
     ip_address = each.value.peer_ip_address
     tags = merge(
