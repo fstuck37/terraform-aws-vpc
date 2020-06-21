@@ -21,6 +21,15 @@ locals {
     ]
   ])
 
+  vpn_connection_routes = flatten([
+    for vpn in keys(var.vpc_connections) : [
+      for cidr in split("|",var.vpc_connections[vpn].destination_cidr_blocks) : {
+        name = vpn
+        cidr = cidr
+      }
+    if var.vpc_connections[vpn].destination_cidr_blocks != ""]
+  ])
+
   num-availbility-zones = "${length(var.zones[var.region])}"
   subnet-order = coalescelist( var.subnet-order, keys(var.subnets))
 
