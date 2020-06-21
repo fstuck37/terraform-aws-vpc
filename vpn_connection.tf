@@ -2,7 +2,6 @@ resource "aws_customer_gateway" "aws_customer_gateways" {
   for_each = var.vpc_connections
     bgp_asn = each.value.bgp_asn
     ip_address = each.value.peer_ip_address
-    type = "ipsec.1"
     tags = merge(
       var.tags,
       map("Name",each.key)
@@ -11,6 +10,7 @@ resource "aws_customer_gateway" "aws_customer_gateways" {
 
 resource "aws_vpn_connection" "aws_vpn_connections" {
   for_each = var.vpc_connections
+    type = "ipsec.1"
     customer_gateway_id   = aws_customer_gateway.aws_customer_gateways[each.key].id
     static_routes_only    = each.value.static_routes_only
     tunnel1_inside_cidr   = each.value.tunnel1_inside_cidr
