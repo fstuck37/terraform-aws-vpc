@@ -12,7 +12,7 @@ resource "aws_customer_gateway" "aws_customer_gateways" {
 resource "aws_vpn_connection" "aws_vpn_connections" {
   for_each = var.vpc_connections
     Name                  = each.key
-    customer_gateway_id   = aws_customer_gateway.aws_customer_gateways[each.key].id]
+    customer_gateway_id   = aws_customer_gateway.aws_customer_gateways[each.key].id
     static_routes_only    = each.value.static_routes_only
     tunnel1_inside_cidr   = each.value.tunnel1_inside_cidr
     tunnel1_preshared_key = each.value.tunnel1_preshared_key
