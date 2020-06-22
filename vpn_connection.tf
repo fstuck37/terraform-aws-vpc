@@ -14,10 +14,10 @@ resource "aws_vpn_connection" "aws_vpn_connections" {
     type = "ipsec.1"
     customer_gateway_id   = aws_customer_gateway.aws_customer_gateways[each.key].id
     static_routes_only    = each.value.static_routes_only
-    tunnel1_inside_cidr   = each.value.tunnel1_inside_cidr
-    tunnel1_preshared_key = each.value.tunnel1_preshared_key
-    tunnel2_inside_cidr   = each.value.tunnel2_inside_cidr
-    tunnel2_preshared_key = each.value.tunnel2_preshared_key
+    tunnel1_inside_cidr   = var.tunnel1_inside_cidr == "" ? null : each.value.tunnel1_inside_cidr
+    tunnel1_preshared_key = var.tunnel1_preshared_key == "" ? null : each.value.tunnel1_preshared_key
+    tunnel2_inside_cidr   = var.tunnel2_inside_cidr == "" ? null : each.value.tunnel2_inside_cidr
+    tunnel2_preshared_key = var.tunnel2_preshared_key == "" ? null : each.value.tunnel2_preshared_key
 
     tags = merge(
       var.tags,
