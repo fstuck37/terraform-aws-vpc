@@ -254,7 +254,7 @@ variable "amazonaws-com" {
 }
 
 /* Site-to-Site VPN Connections */
-variable "vpc_connections" {
+variable "vpn_connections" {
   type = map(map(string))
   description = "Optional : A map of a map with the settings for each VPN.  The key will be the name of the VPN"
   default = { }
