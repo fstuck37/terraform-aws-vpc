@@ -259,3 +259,17 @@ variable "vpn_connections" {
   description = "Optional : A map of a map with the settings for each VPN.  The key will be the name of the VPN"
   default = { }
 }
+
+
+variable "default_vpn_connections" {
+  type = map(string)
+  description = "Do not use: This defines the default values for each map entry in vpn_connections. Do not override this."
+  default = { 
+      static_routes_only = false
+      destination_cidr_blocks = ""
+      tunnel1_inside_cidr = null
+      tunnel1_preshared_key = null
+      tunnel2_inside_cidr = null
+      tunnel2_preshared_key = null
+  }
+}

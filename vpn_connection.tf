@@ -1,15 +1,3 @@
-variable "default_vpn_connections" {
-  type = map(string)
-  default = { 
-      static_routes_only = false
-      destination_cidr_blocks = ""
-      tunnel1_inside_cidr = null
-      tunnel1_preshared_key = null
-      tunnel2_inside_cidr = null
-      tunnel2_preshared_key = null
-  }
-}
-
 resource "aws_customer_gateway" "aws_customer_gateways" {
   for_each = var.vpn_connections
     type = "ipsec.1"
