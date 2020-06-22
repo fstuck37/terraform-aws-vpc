@@ -1,4 +1,4 @@
-svariable "default_vpn_connections" {
+variable "default_vpn_connections" {
   type = map(string)
   default = { 
       static_routes_only = false
