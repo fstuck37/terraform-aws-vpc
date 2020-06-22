@@ -53,3 +53,26 @@ output "aws_ec2_transit_gateway_vpc_attachment" {
   description = "ID of the transit gateway attachment"
   value = (join("",aws_ec2_transit_gateway_vpc_attachment.txgw_attachment.*.id))
 }
+
+output "vpn_connections" {
+  value = zipmap(
+    [for v in aws_vpn_connection.aws_vpn_connections : v.tags.Name],	#Key
+    [for v in aws_vpn_connection.aws_vpn_connections :  
+      map(                                                              #Value
+        "id", v.id,
+        "tunnel1_address", v.tunnel1_address,
+        "tunnel1_cgw_inside_address", v.tunnel1_cgw_inside_address,
+        "tunnel1_vgw_inside_address", v.tunnel1_vgw_inside_address,
+        "tunnel1_preshared_key", v.tunnel1_preshared_key,
+        "tunnel1_bgp_asn", v.tunnel1_bgp_asn ,
+        "tunnel1_bgp_holdtime", v.tunnel1_bgp_holdtime,
+        "tunnel2_address", v.tunnel2_address,
+        "tunnel2_cgw_inside_address", v.tunnel2_cgw_inside_address,
+        "tunnel2_vgw_inside_address", v.tunnel2_vgw_inside_address,
+        "tunnel2_preshared_key", v.tunnel2_preshared_key,
+        "tunnel2_bgp_asn", v.tunnel2_bgp_asn ,
+        "tunnel2_bgp_holdtime", v.tunnel2_bgp_holdtime
+      )
+    ]
+  )
+}
