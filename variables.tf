@@ -74,7 +74,11 @@ variable "route53_outbound_endpoint" {
   description = "Optional : A boolean flag to enable/disable Route53 Outbound Endpoint. Defaults false."
   default = false
 }
-
+variable "forward_rules" {
+  type = list
+  description = "List of Forward Rules"
+  default = []
+}
 variable "route53_resolver_endpoint_cidr_blocks" {
   type = list(string)
   description = "Optional : A list of the source CIDR blocks to allow to commuicate with the Route53 Resolver Endpoint. Defaults 0.0.0.0/0."
