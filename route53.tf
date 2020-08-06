@@ -109,7 +109,7 @@ resource "aws_route53_resolver_rule" "resolver_rule" {
     ip = element(split(",", lookup(var.forwarding_rules[count.index], "ips", var.region)),0)
   }
   target_ip {
-    ip = element(split(",", lookup(var.forwarding_rules[count.index], "ips", var.region)),1)}
+    ip = element(split(",", lookup(var.forwarding_rules[count.index], "ips", var.region)),1)
   }
 
   tags = var.tags
