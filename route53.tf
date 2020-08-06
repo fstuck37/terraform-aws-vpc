@@ -103,13 +103,13 @@ resource "aws_route53_resolver_rule" "resolver_rule" {
   domain_name          = lookup(var.forward_rules[count.index], "domain_name")
   name                 = replace(lookup(var.forward_rules[count.index], "domain_name"),".","-")
   rule_type            = lookup(var.forward_rules[count.index], "rule_type")
-  resolver_endpoint_id = aws_route53_resolver_endpoint.outbound_endpoint.*.id
+  resolver_endpoint_id = aws_route53_resolver_endpoint.outbound_endpoint.0.id
 
   target_ip {
-    ip = element(split(",", lookup(var.forward_rules[count.index], "ips", var.region)),0)
+    ip = element(split(",", var.forward_rules[count.index]["ips"][var.region]),0)
   }
   target_ip {
-    ip = element(split(",", lookup(var.forward_rules[count.index], "ips", var.region)),1)
+    ip = element(split(",", var.forward_rules[count.index]["ips"][var.region]),1)
   }
 
   tags = var.tags
