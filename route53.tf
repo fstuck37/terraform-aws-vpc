@@ -101,7 +101,7 @@ resource "aws_route53_resolver_endpoint" "outbound_endpoint" {
 resource "aws_route53_resolver_rule" "resolver_rule" {
   count                = var.route53_outbound_endpoint ? length(var.forward_rules) : 0
   domain_name          = lookup(var.forward_rules[count.index], "domain_name")
-  name                 = replace(lookup(var.forward_rules[count.index], "domain_name"),".","-")
+  name                 = replace(lookup(var.forward_rules[count.index], "domain_name"),".","_")
   rule_type            = lookup(var.forward_rules[count.index], "rule_type")
   resolver_endpoint_id = aws_route53_resolver_endpoint.outbound_endpoint.0.id
 
