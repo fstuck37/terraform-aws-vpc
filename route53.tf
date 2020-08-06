@@ -99,17 +99,17 @@ resource "aws_route53_resolver_endpoint" "outbound_endpoint" {
 
 
 resource "aws_route53_resolver_rule" "resolver_rule" {
-  count                = var.route53_outbound_endpoint ? length(var.forwarding_rules) : 0
-  domain_name          = lookup(var.forwarding_rules[count.index], "domain_name")
-  name                 = replace(lookup(var.forwarding_rules[count.index], "domain_name"),".","-")
-  rule_type            = lookup(var.forwarding_rules[count.index], "rule_type")
+  count                = var.route53_outbound_endpoint ? length(var.forward_rules) : 0
+  domain_name          = lookup(var.forward_rules[count.index], "domain_name")
+  name                 = replace(lookup(var.forward_rules[count.index], "domain_name"),".","-")
+  rule_type            = lookup(var.forward_rules[count.index], "rule_type")
   resolver_endpoint_id = aws_route53_resolver_endpoint.outbound_endpoint.*.id
 
   target_ip {
-    ip = element(split(",", lookup(var.forwarding_rules[count.index], "ips", var.region)),0)
+    ip = element(split(",", lookup(var.forward_rules[count.index], "ips", var.region)),0)
   }
   target_ip {
-    ip = element(split(",", lookup(var.forwarding_rules[count.index], "ips", var.region)),1)
+    ip = element(split(",", lookup(var.forward_rules[count.index], "ips", var.region)),1)
   }
 
   tags = var.tags
