@@ -69,6 +69,12 @@ variable "route53_resolver_endpoint" {
   default = false
 }
 
+variable "route53_outbound_endpoint" {
+  type = string
+  description = "Optional : A boolean flag to enable/disable Route53 Outbound Endpoint. Defaults false."
+  default = false
+}
+
 variable "route53_resolver_endpoint_cidr_blocks" {
   type = list(string)
   description = "Optional : A list of the source CIDR blocks to allow to commuicate with the Route53 Resolver Endpoint. Defaults 0.0.0.0/0."
@@ -251,4 +257,25 @@ variable "cloudwatch_retention_in_days" {
 variable "amazonaws-com" {
   description = "Optional : Ability to change principal for flowlogs from amazonaws.com to amazonaws.com.cn."
   default = "amazonaws.com"
+}
+
+/* Site-to-Site VPN Connections */
+variable "vpn_connections" {
+  type = map(map(string))
+  description = "Optional : A map of a map with the settings for each VPN.  The key will be the name of the VPN"
+  default = { }
+}
+
+
+variable "default_vpn_connections" {
+  type = map(string)
+  description = "Do not use: This defines the default values for each map entry in vpn_connections. Do not override this."
+  default = { 
+      static_routes_only = false
+      destination_cidr_blocks = ""
+      tunnel1_inside_cidr = null
+      tunnel1_preshared_key = null
+      tunnel2_inside_cidr = null
+      tunnel2_preshared_key = null
+  }
 }
