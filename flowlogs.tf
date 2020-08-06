@@ -110,5 +110,5 @@ resource "aws_lambda_permission" "allow_cloudwatch" {
   function_name  = var.aws_lambda_function_name
   principal      = "logs.${var.region}.${var.amazonaws-com}"
   source_account = var.acctnum
-  source_arn     = aws_cloudwatch_log_group.flowlog_group.0.arn
+  source_arn     = "arn:aws:logs:${var.region}:${var.acctnum}:log-group:${aws_vpc.main_vpc.id}:*"
 }
