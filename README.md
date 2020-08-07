@@ -128,7 +128,7 @@ Argument Reference
     ```
     [
       {
-            domain_name = "geek.net"
+            domain_name = "geek37.com"
             rule_type   = "FORWARD"
             ips         = {
                 us-east-1 = "10.0.0.1,10.0.0.2"
