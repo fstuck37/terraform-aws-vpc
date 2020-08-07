@@ -76,3 +76,40 @@ resource "aws_route53_resolver_endpoint" "resolver_endpoint" {
     local.resource-tags["aws_route53_resolver_endpoint"]
   )
 }
+
+resource "aws_route53_resolver_endpoint" "outbound_endpoint" {
+  count     = var.route53_outbound_endpoint ? 1 : 0
+  name      = "r53ept-outbound-${var.name-vars["account"]}-${replace(var.region,"-", "")}-${var.name-vars["name"]}"
+  direction = "OUTBOUND"
+  security_group_ids = aws_security_group.sg-r53ept-inbound.*.id
+
+  dynamic "ip_address" {
+    for_each = local.map_subnet_id_list[var.route53_resolver_endpoint_subnet]
+    content {
+      subnet_id = ip_address.value
+    }
+  }
+
+  tags = merge(
+    var.tags,
+    map("Name",format("%s", "sg-r53ept-outbound-${var.name-vars["account"]}-${replace(var.region,"-", "")}-${var.name-vars["name"]}" )),
+    local.resource-tags["aws_route53_resolver_endpoint"]
+  )
+}
+
+resource "aws_route53_resolver_rule" "resolver_rule" {
+  count                = var.route53_outbound_endpoint ? length(var.forward_rules) : 0
+  domain_name          = lookup(var.forward_rules[count.index], "domain_name")
+  name                 = replace(lookup(var.forward_rules[count.index], "domain_name"),".","_")
+  rule_type            = lookup(var.forward_rules[count.index], "rule_type")
+  resolver_endpoint_id = aws_route53_resolver_endpoint.outbound_endpoint.0.id
+
+  target_ip {
+    ip = element(split(",", lookup(var.forward_rules[count.index]["ips"], var.region, var.forward_rules[count.index]["ips"]["us-east-1"])),0)
+  }
+  target_ip {
+    ip = element(split(",", lookup(var.forward_rules[count.index]["ips"], var.region, var.forward_rules[count.index]["ips"]["us-east-1"])),1)
+  }
+
+  tags = var.tags
+}

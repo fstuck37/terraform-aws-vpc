@@ -80,6 +80,16 @@ variable "route53_resolver_endpoint_subnet" {
   description = "Optional : The subnet to install Route53 Resolver Endpoint , the default is mgt but must exist as a key in the variable subnets."
   default = "mgt"
 }
+variable "route53_outbound_endpoint" {
+  type = string
+  description = "Optional : A boolean flag to enable/disable Route53 Outbound Endpoint. Defaults false."
+  default = false
+}
+variable "forward_rules" {
+  type = list
+  description = "List of Forward Rules"
+  default = []
+}
 
 variable "instance_tenancy" {
   type        = string
