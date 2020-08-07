@@ -125,7 +125,8 @@ Argument Reference
    * **route53_outbound_endpoint** - Optional : A boolean flag to enable/disable Route53 Outbound Endpoint. Defaults false.   
    * **forward_rules** - Optional - : List of Forward Rules to add to Outbound Resolver. All Region Values Default to us-east-1, if a secondary region dns set is needed it can be added to ips.
     IE: 
-    ```[
+    ```
+    [
       {
             domain_name = "geek.net"
             rule_type   = "FORWARD"
