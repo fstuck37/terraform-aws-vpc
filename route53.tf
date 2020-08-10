@@ -113,3 +113,9 @@ resource "aws_route53_resolver_rule" "resolver_rule" {
 
   tags = var.tags
 }
+
+resource "aws_route53_resolver_rule_association" "r53_outbound_rule_association"{
+  count            = var.route53_outbound_endpoint ? length(flatten(data.aws_route53_resolver_rules.resolver_rule.*.resolver_rule_ids)) : 0
+  resolver_rule_id = element(flatten(data.aws_route53_resolver_rules.resolver_rule.*.resolver_rule_ids), count.index)
+  vpc_id           = aws_vpc.main_vpc.id
+}
