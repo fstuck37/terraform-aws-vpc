@@ -64,6 +64,7 @@ locals {
   routetable-accepter-list = (split(",", join(",", data.template_file.routetable-accepter-two.*.rendered)))
 
   map_subnet_id_list = length(aws_subnet.subnets.*.id) == 0 ? {} : zipmap(var.subnet-order, chunklist(aws_subnet.subnets.*.id, local.num-availbility-zones))
+  map_subnet_arn_list = length(aws_subnet.subnets.*.arn) == 0 ? {} : zipmap(var.subnet-order, chunklist(aws_subnet.subnets.*.arn, local.num-availbility-zones))
 }
 
 
