@@ -48,9 +48,6 @@ output "peerlink_ids" {
       [for v in aws_vpc_peering_connection.peer : v.id]
     ))
 }
-output "route_53_rules" {
-  value = zipmap(flatten(data.aws_route53_resolver_rules.shared_resolver_rule.*.resolver_rule_ids), flatten(data.aws_route53_resolver_rules.shared_resolver_rule.*.resolver_rule_ids)) 
-}
 
 output "aws_ec2_transit_gateway_vpc_attachment" {
   description = "ID of the transit gateway attachment"
