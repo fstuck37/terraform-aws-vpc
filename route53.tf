@@ -17,8 +17,8 @@ data "aws_route53_resolver_rules" "shared_resolver_rule"{
 }
 
 resource "aws_route53_resolver_rule_association" "r53_resolver_rule_association"{
-  count            = var.shared_resolver_rule ? length(flatten(data.aws_route53_resolver_rules.shared_resolver_rule.*.resolver_rule_ids)) : 0
-  resolver_rule_id = element(flatten(data.aws_route53_resolver_rules.shared_resolver_rule.*.resolver_rule_ids), count.index)
+  for_each         = var.shared_resolver_rule ? zipmap(flatten(data.aws_route53_resolver_rules.shared_resolver_rule.*.resolver_rule_ids), flatten(data.aws_route53_resolver_rules.shared_resolver_rule.*.resolver_rule_ids)) : {}
+  resolver_rule_id = each.value
   vpc_id           = aws_vpc.main_vpc.id
 }
 
@@ -115,7 +115,7 @@ resource "aws_route53_resolver_rule" "resolver_rule" {
 }
 
 resource "aws_route53_resolver_rule_association" "r53_outbound_rule_association"{
-  count            = var.route53_outbound_endpoint ? length(flatten(aws_route53_resolver_rule.resolver_rule.*.id)) : 0
-  resolver_rule_id = element(flatten(aws_route53_resolver_rule.resolver_rule.*.id), count.index)
+  for_each         = var.route53_outbound_endpoint ? zipmap(flatten(aws_route53_resolver_rule.resolver_rule.*.id), flatten(aws_route53_resolver_rule.resolver_rule.*.id)) : {}
+  resolver_rule_id = each.value
   vpc_id           = aws_vpc.main_vpc.id
 }
