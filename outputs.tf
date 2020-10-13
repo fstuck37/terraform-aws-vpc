@@ -49,7 +49,7 @@ output "peerlink_ids" {
     ))
 }
 output "route_53_rules" {
-  value = flatten(data.aws_route53_resolver_rules.shared_resolver_rule)
+  value = flatten(data.aws_route53_resolver_rules)
 }
 
 output "aws_ec2_transit_gateway_vpc_attachment" {
