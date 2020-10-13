@@ -24,7 +24,7 @@ data "aws_route53_resolver_rules" "shared_resolver_rule"{
 
 resource "aws_route53_resolver_rule_association" "r53_resolver_rule_association"{
   # count            = var.shared_resolver_rule ? length(flatten(data.aws_route53_resolver_rules.shared_resolver_rule.*.resolver_rule_ids)) : 0
-  for_each         = zipmap(flatten(data.aws_route53_resolver_rules.shared_resolver_rule.*.resolver_rule_ids), flatten(data.aws_route53_resolver_rules.shared_resolver_rule.*.resolver_rule_ids))
+  for_each         = var.shared_resolver_rule ? zipmap(flatten(data.aws_route53_resolver_rules.shared_resolver_rule.*.resolver_rule_ids), flatten(data.aws_route53_resolver_rules.shared_resolver_rule.*.resolver_rule_ids)) : {}
   resolver_rule_id = each.value
   vpc_id           = aws_vpc.main_vpc.id
 }
