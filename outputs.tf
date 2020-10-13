@@ -49,7 +49,7 @@ output "peerlink_ids" {
     ))
 }
 output "route_53_rules" {
-  value = data.aws_route53_resolver_rules.shared_resolver_rule
+  value = zipmap(flatten(data.aws_route53_resolver_rules.shared_resolver_rule.*.resolver_rule_ids), flatten(data.aws_route53_resolver_rules.shared_resolver_rule.*.resolver_rule_ids)) 
 }
 
 output "aws_ec2_transit_gateway_vpc_attachment" {
