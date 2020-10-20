@@ -7,6 +7,15 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "txgw_attachment" {
 
 
 resource "aws_route" "txgw-routes" {
+  for_each               = {for item in local.txgw_routes : item.name => name}
+  route_table_id         = each.route_table
+  destination_cidr_block = each.route
+  transit_gateway_id     = var.transit_gateway_id
+}
+
+
+/*
+resource "aws_route" "txgw-routes" {
   count                  = var.transit_gateway_id == false ? 0 : length(var.transit_gateway_routes) * local.num-availbility-zones
   
   route_table_id         = aws_route_table.privrt.*.id[module.txgw-route.e1-list[count.index]]
@@ -19,3 +28,4 @@ module "txgw-route" {
   e1-size = local.num-availbility-zones
   e2-size = length(var.transit_gateway_routes)
 }
+*/

@@ -1,4 +1,14 @@
 locals {
+  txgw_routes = flatten([
+  for rt in var.transit_gateway_routes : [
+    for rtid in aws_route_table.privrt : {
+      name        = "${rtid.id}-${rt}"a
+      route       = rt
+      route_table = rtid.id
+      }
+    if var.transit_gateway_id == true]
+  ])
+  
   peerlink_accepter_routes = flatten([
   for rt in aws_route_table.privrt : [
     for key, value in var.peer_accepter : {

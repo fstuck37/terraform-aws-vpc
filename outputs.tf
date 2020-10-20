@@ -24,7 +24,7 @@ output "map_subnet_id_list" {
 }
 
 output "map_subnet_arn_list" {
-  description = "Map with keys the same as subnet-order and values a list of subnet IDs"
+  description = "Map with keys the same as subnet-order and values a list of subnet ARNs"
   value = local.map_subnet_arn_list
 }
 
