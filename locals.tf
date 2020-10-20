@@ -6,7 +6,7 @@ locals {
       route       = rt
       route_table = rtid.id
       }
-    if var.transit_gateway_id == true]
+    if var.transit_gateway_id != false]
   ])
  
  peerlink_accepter_routes = flatten([
