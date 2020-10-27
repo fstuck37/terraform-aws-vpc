@@ -115,7 +115,7 @@ resource "aws_route53_resolver_rule" "resolver_rule" {
 }
 
 resource "aws_route53_resolver_rule_association" "r53_outbound_rule_association"{
-  for_each         = var.shared_resolver_rule ? toset(flatten(aws_route53_resolver_rule.resolver_rule.*.id)) : []
+  for_each         = toset(flatten(aws_route53_resolver_rule.resolver_rule.*.id))
   resolver_rule_id = each.value
   vpc_id           = aws_vpc.main_vpc.id
   depends_on = [
