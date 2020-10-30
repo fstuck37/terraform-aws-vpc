@@ -12,6 +12,7 @@ resource "aws_customer_gateway" "aws_customer_gateways" {
 resource "aws_vpn_connection" "aws_vpn_connections" {
   for_each = var.vpn_connections
     type = "ipsec.1"
+    vpn_gateway_id        = aws_vpn_gateway.vgw.id
     customer_gateway_id   = aws_customer_gateway.aws_customer_gateways[each.key].id
     static_routes_only    = merge(var.default_vpn_connections, each.value).static_routes_only
     tunnel1_inside_cidr   = merge(var.default_vpn_connections, each.value).tunnel1_inside_cidr == "" ? null : merge(var.default_vpn_connections, each.value).tunnel1_inside_cidr
