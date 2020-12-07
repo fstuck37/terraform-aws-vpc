@@ -13,9 +13,19 @@ output "subnet_ids" {
   value = length(data.template_file.subnet-name.*.rendered) == length(aws_subnet.subnets.*.id) ? zipmap(data.template_file.subnet-name.*.rendered, aws_subnet.subnets.*.id) : {}
 }
 
+output "subnet_arns" {
+  description = "Map with keys based on the subnet names and values of subnet ARNs"
+  value = length(data.template_file.subnet-name.*.rendered) == length(aws_subnet.subnets.*.arn) ? zipmap(data.template_file.subnet-name.*.rendered, aws_subnet.subnets.*.arn) : {}
+}
+
 output "map_subnet_id_list" {
   description = "Map with keys the same as subnet-order and values a list of subnet IDs"
   value = local.map_subnet_id_list
+}
+
+output "map_subnet_arn_list" {
+  description = "Map with keys the same as subnet-order and values a list of subnet ARNs"
+  value = local.map_subnet_arn_list
 }
 
 output "pubrt_id" {

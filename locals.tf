@@ -1,5 +1,15 @@
 locals {
-  peerlink_accepter_routes = flatten([
+  txgw_routes = flatten([
+  for rt in var.transit_gateway_routes : [
+    for rtid in aws_route_table.privrt : {
+      name        = "${rtid.id}-${rt}"
+      route       = rt
+      route_table = rtid.id
+      }
+    if var.transit_gateway_id != false]
+  ])
+ 
+ peerlink_accepter_routes = flatten([
   for rt in aws_route_table.privrt : [
     for key, value in var.peer_accepter : {
       name        = "${rt.id}-${replace(replace(element(split("|", value),1), "." , "-"), "/", "-")}" 
@@ -56,14 +66,17 @@ locals {
 
   peerlink-size = length(var.peer_requester)
   routetable-size = length(var.zones[var.region])
-  peerlink-list = split(",", join(",", data.template_file.peerlink-two.*.rendered))
+/*
+ peerlink-list = split(",", join(",", data.template_file.peerlink-two.*.rendered))
   routetable-list = (split(",", join(",", data.template_file.routetable-two.*.rendered)))
   
   peerlink-accepter-size = length(var.peer_accepter)
   peerlink-accepter-list = split(",", join(",", data.template_file.peerlink-accepter-two.*.rendered))
   routetable-accepter-list = (split(",", join(",", data.template_file.routetable-accepter-two.*.rendered)))
+*/
 
   map_subnet_id_list = length(aws_subnet.subnets.*.id) == 0 ? {} : zipmap(var.subnet-order, chunklist(aws_subnet.subnets.*.id, local.num-availbility-zones))
+  map_subnet_arn_list = length(aws_subnet.subnets.*.arn) == 0 ? {} : zipmap(var.subnet-order, chunklist(aws_subnet.subnets.*.arn, local.num-availbility-zones))
 }
 
 
@@ -93,6 +106,7 @@ data "template_file" "subnets-two" {
 }
 
 /* Peer Link */
+/*
 data "template_file" "routetable-one" {
   count    = local.routetable-size
   template = count.index
@@ -112,9 +126,10 @@ data "template_file" "peerlink-two" {
   count    = length(data.template_file.peerlink-one.*.rendered)
   template = join(",",slice(split(",", replace(join(",", local.baselist), "A", data.template_file.peerlink-one.*.rendered[count.index])), 0, local.routetable-size))
 }
-
+*/
 
 /* Peer Link Accepter */
+/*
 data "template_file" "peerlink-accepter-one" {
   count    = local.peerlink-accepter-size
   template = count.index
@@ -134,3 +149,4 @@ data "template_file" "routetable-accepter-two" {
   count    = length(data.template_file.routetable-accepter-one.*.rendered)
   template = join(",",slice(split(",", replace(join(",", local.baselist), "A", data.template_file.routetable-accepter-one.*.rendered[count.index])), 0, local.peerlink-accepter-size))
 }
+*/
