@@ -98,27 +98,25 @@ resource "aws_route53_resolver_endpoint" "outbound_endpoint" {
 }
 
 resource "aws_route53_resolver_rule" "resolver_rule" {
-  count                = var.route53_outbound_endpoint ? length(var.forward_rules) : 0
-  domain_name          = lookup(var.forward_rules[count.index], "domain_name")
-  name                 = replace(lookup(var.forward_rules[count.index], "domain_name"),".","_")
-  rule_type            = lookup(var.forward_rules[count.index], "rule_type")
+  for_each             = var.route53_outbound_endpoint ? {for rule in var.forward_rules : rule.domain_name => rule} : {}
+  domain_name          = each.value.domain_name
+  name                 = replace(each.value.domain_name,".","_")
+  rule_type            = each.value.rule_type
   resolver_endpoint_id = aws_route53_resolver_endpoint.outbound_endpoint.0.id
 
   target_ip {
-    ip = element(split(",", lookup(var.forward_rules[count.index]["ips"], var.region, var.forward_rules[count.index]["ips"]["us-east-1"])),0)
+    ip = element(split(",", lookup(each.value.ips, var.region, each.value.ips["us-east-1"])),0)
+
   }
   target_ip {
-    ip = element(split(",", lookup(var.forward_rules[count.index]["ips"], var.region, var.forward_rules[count.index]["ips"]["us-east-1"])),1)
+    ip = element(split(",", lookup(each.value.ips, var.region, each.value.ips["us-east-1"])),1)
   }
 
   tags = var.tags
 }
 
 resource "aws_route53_resolver_rule_association" "r53_outbound_rule_association"{
-  for_each         = toset(flatten(aws_route53_resolver_rule.resolver_rule.*.id))
-  resolver_rule_id = each.value
+  for_each         = var.shared_resolver_rule ? aws_route53_resolver_rule.resolver_rule : {}
+  resolver_rule_id = each.value.id
   vpc_id           = aws_vpc.main_vpc.id
-  depends_on = [
-    aws_route53_resolver_rule.resolver_rule,
-  ]
 }
