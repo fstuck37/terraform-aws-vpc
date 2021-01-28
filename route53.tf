@@ -11,13 +11,24 @@ resource "aws_route53_zone" "reverse_zones" {
   }
 }
 
-data "aws_route53_resolver_rules" "shared_resolver_rule"{
+data "aws_route53_resolver_rules" "shared_resolver_rule_with_me"{
   count        = var.shared_resolver_rule ? 1 : 0
   share_status = "SHARED_WITH_ME"
 }
 
+data "aws_route53_resolver_rules" "shared_resolver_rule_by_me"{
+  count        = var.shared_resolver_rule ? 1 : 0
+  share_status = "SHARED_BY_ME"
+}
+
 resource "aws_route53_resolver_rule_association" "r53_resolver_rule_association"{
-  for_each         = var.shared_resolver_rule ? zipmap(flatten(data.aws_route53_resolver_rules.shared_resolver_rule.*.resolver_rule_ids), flatten(data.aws_route53_resolver_rules.shared_resolver_rule.*.resolver_rule_ids)) : {}
+  for_each = var.shared_resolver_rule ? toset(
+      concat(
+        flatten(
+          data.aws_route53_resolver_rules.shared_resolver_rule_with_me.*.resolver_rule_ids),
+        flatten(
+          data.aws_route53_resolver_rules.shared_resolver_rule_by_me.*.resolver_rule_ids))) : []
+  
   resolver_rule_id = each.value
   vpc_id           = aws_vpc.main_vpc.id
 }
