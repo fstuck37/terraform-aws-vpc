@@ -65,6 +65,6 @@ resource "aws_route" "pub-default-eg" {
   count                  = contains(keys(var.subnets), "pub") && var.egress_only_internet_gateway ? 1 : 0
   route_table_id         = join("",aws_route_table.pubrt.*.id)
   destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_internet_gateway.eg-inet-gw.0.id
+  gateway_id             = aws_egress_only_internet_gateway.eg-inet-gw.0.id
 }
 
