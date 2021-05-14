@@ -7,12 +7,24 @@
 #                                                #
 # Change History:                                #
 # 03202019: Initial File                         #
+# 05142021: Added egress only IGW                #
 #                                                #
 ##################################################
 
 resource "aws_internet_gateway" "inet-gw" {
-  count = contains(keys(var.subnets), "pub") ? 1 : 0
+  count = contains(keys(var.subnets), "pub") && !egress_only_internet_gateway ? 1 : 0
   vpc_id = aws_vpc.main_vpc.id
+  tags = merge(
+    var.tags,
+    map("Name",format("%s", "${var.name-vars["account"]}-${var.name-vars["name"]}-${replace(var.region,"-", "")}-igw" )),
+    local.resource-tags["aws_internet_gateway"]
+  )
+}
+
+resource "aws_egress_only_internet_gateway" "eg-inet-gw" {
+  count = contains(keys(var.subnets), "pub") && egress_only_internet_gateway ? 1 : 0
+  vpc_id = aws_vpc.main_vpc.id
+
   tags = merge(
     var.tags,
     map("Name",format("%s", "${var.name-vars["account"]}-${var.name-vars["name"]}-${replace(var.region,"-", "")}-igw" )),

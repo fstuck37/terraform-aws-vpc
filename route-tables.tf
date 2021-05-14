@@ -9,6 +9,7 @@
 #                                                #
 # Change History:                                #
 # 03202019: Initial File                         #
+# 05142021: Added egress only IGW                #
 #                                                #
 ##################################################
 
@@ -54,10 +55,16 @@ resource "aws_route" "privrt-gateway" {
 }
 
 resource "aws_route" "pub-default" {
-  count                  = contains(keys(var.subnets), "pub") ? 1 : 0
+  count                  = contains(keys(var.subnets), "pub") && !egress_only_internet_gateway ? 1 : 0
   route_table_id         = join("",aws_route_table.pubrt.*.id)
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.inet-gw.0.id
 }
 
+resource "aws_route" "pub-default-eg" {
+  count                  = contains(keys(var.subnets), "pub") && egress_only_internet_gateway ? 1 : 0
+  route_table_id         = join("",aws_route_table.pubrt.*.id)
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.eg-inet-gw.0.id
+}
 

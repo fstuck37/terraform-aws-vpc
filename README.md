@@ -97,6 +97,7 @@ Argument Reference
    }
    ```
    * **zones** - Optional : Map of AWS zones with a value equal to a list of the availability zones in the region. Each of the AZs listed are utilized for the VPC.
+   * **egress_only_internet_gateway** - Optional : Boolean to deploy egress_only_internet_gateway instead of aws_internet_gateway defaults to false
 * **Subnet Information**
    * **subnets** - Optional : Keys are used for subnet names and values are the subnets for the various layers. These will be divided by the number of AZs based on ceil(log(length(var.zones[var.region]),2)). 'pub' is the only special name used for the public subnet.
    ```

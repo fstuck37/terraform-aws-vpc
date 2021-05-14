@@ -283,3 +283,8 @@ variable "default_vpn_connections" {
       tunnel2_preshared_key = null
   }
 }
+
+variable "egress_only_internet_gateway" {
+  description = "Optional : Deploy egress_only_internet_gateway instead of aws_internet_gateway"
+  default     = false
+}
