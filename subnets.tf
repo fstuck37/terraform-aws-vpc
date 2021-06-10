@@ -21,6 +21,10 @@ resource "aws_subnet" "subnets" {
     local.subnet-tags["${element(local.subnet-order,local.subnets-list[count.index])}"],
     local.resource-tags["aws_subnet"]
   )
+
+  lifecycle {
+    ignore_changes = [tags]
+  }
 }
 
 data "template_file" "subnets-tags" {
