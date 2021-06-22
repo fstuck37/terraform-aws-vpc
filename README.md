@@ -202,7 +202,7 @@ Argument Reference
 
 * **Gateway Endpoint**
    * **deploy_gwep** - Optional : Setup Gateway Load Balancer Endpoint components
-   * **gwep_subnet** - Optional : CIDR Blocked used for the Gateway Endpoints
+   * **gwep_subnet** - Optional : CIDR Blocked used for the Gateway Endpoints. If this CIDR block is not included in the VPC CIDR then add to vpc-cidrs as well.
    * **gwep_service_name** - Optional : Service Name for Gateway Endpoint. This will be divided by the number of AZs based on ceil(log(length(var.zones[var.region]),2))
 
 Notes and Workarounds
