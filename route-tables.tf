@@ -106,7 +106,7 @@ resource "aws_route_table" "igwrt" {
 
 resource "aws_route_table_association" "igwrt-association" {
   count          = var.deploy_gwep && !(var.egress_only_internet_gateway) ? 1 : 0
-  gateway_id     = aws_internet_gateway.inet-gw.id
+  gateway_id     = aws_internet_gateway.inet-gw.0.id
   route_table_id = aws_route_table.igwrt.0.id
 }
 

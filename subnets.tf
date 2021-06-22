@@ -34,7 +34,7 @@ data "template_file" "subnets-tags" {
 
 
 resource "aws_subnet" "gwep" {
-  count             = var.deploy_gwep && !(egress_only_internet_gateway) ? local.num-availbility-zones : 0
+  count             = var.deploy_gwep && !(var.egress_only_internet_gateway) ? local.num-availbility-zones : 0
   vpc_id            = aws_vpc.main_vpc.id
   cidr_block        = cidrsubnet(var.gwep_subnet,ceil(log(length(var.zones[var.region]),2)),count.index)
   availability_zone = element(var.zones[var.region],count.index)
