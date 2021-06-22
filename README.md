@@ -200,6 +200,11 @@ Argument Reference
    * **flow_log_filter** - CloudWatch subscription filter to match flow logs.
    * **cloudwatch_retention_in_days** - Optional : Number of days to keep logs within the cloudwatch log_group. The default is 7 days.
 
+* **Gateway Endpoint**
+   * **deploy_gwep** - Optional : Setup Gateway Load Balancer Endpoint components
+   * **gwep_subnet** - Optional : CIDR Blocked used for the Gateway Endpoints
+   * **gwep_service_name** - Optional : Service Name for Gateway Endpoint. This will be divided by the number of AZs based on ceil(log(length(var.zones[var.region]),2))
+
 Notes and Workarounds
 ------------
 A workaround to deleting subnets or peer links.

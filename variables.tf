@@ -288,3 +288,20 @@ variable "egress_only_internet_gateway" {
   description = "Optional : Deploy egress_only_internet_gateway instead of aws_internet_gateway"
   default     = false
 }
+
+/* Setup Gateway Load Balancer Endpoint */
+variable "deploy_gwep" {
+  description = "Optional : Setup Gateway Load Balancer Endpoint components"
+  default = false
+}
+
+variable "gwep_subnet" {
+  description = "Optional : CIDR Blocked used for the Gateway Endpoints"
+  default = ""
+}
+
+variable "gwep_service_name" {
+  description = "Optional : Service Name for Gateway Endpoint"
+  default = ""
+}
+
