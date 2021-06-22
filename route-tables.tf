@@ -72,7 +72,7 @@ resource "aws_route" "pub-default-eg" {
 /* Gateway Endpoint Routing Setup */
 
 resource "aws_route_table" "gweprt" {
-  count  = var.deploy_gwep && !(egress_only_internet_gateway) ? 1 : 0
+  count  = var.deploy_gwep && !(var.egress_only_internet_gateway) ? 1 : 0
   vpc_id = aws_vpc.main_vpc.id
   tags   = merge(
     var.tags,
@@ -82,20 +82,20 @@ resource "aws_route_table" "gweprt" {
 }
 
 resource "aws_route" "gweprt-route" {
-  count                  = var.deploy_gwep && !(egress_only_internet_gateway) ? 1 : 0
+  count                  = var.deploy_gwep && !(var.egress_only_internet_gateway) ? 1 : 0
   route_table_id         = aws_route_table.gweprt.0.id
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.inet-gw.0.id
 }
 
 resource "aws_route_table_association" "gweprt" {
-  count          = var.deploy_gwep && !(egress_only_internet_gateway) ? local.num-availbility-zones : 0
+  count          = var.deploy_gwep && !(var.egress_only_internet_gateway) ? local.num-availbility-zones : 0
   subnet_id      = aws_subnet.gwep.*.id[count.index]
   route_table_id = aws_route_table.gweprt.id
 }
 
 resource "aws_route_table" "igwrt" {
-  count  = var.deploy_gwep && !(egress_only_internet_gateway) ? 1 : 0
+  count  = var.deploy_gwep && !(var.egress_only_internet_gateway) ? 1 : 0
   vpc_id = aws_vpc.main_vpc.id
   tags   = merge(
     var.tags,
@@ -105,13 +105,13 @@ resource "aws_route_table" "igwrt" {
 }
 
 resource "aws_route_table_association" "igwrt-association" {
-  count          = var.deploy_gwep && !(egress_only_internet_gateway) ? 1 : 0
+  count          = var.deploy_gwep && !(var.egress_only_internet_gateway) ? 1 : 0
   gateway_id     = aws_internet_gateway.inet-gw.id
   route_table_id = aws_route_table.igwrt.0.id
 }
 
 resource "aws_route" "igwrt-pub-route" {
-  count  = var.deploy_gwep && !(egress_only_internet_gateway) ? 1 : 0
+  count  = var.deploy_gwep && !(var.egress_only_internet_gateway) ? 1 : 0
   route_table_id = aws_route_table.igwrt.0.id
   vpc_endpoint_id = aws_vpc_endpoint.GatewayLoadBalancer.0.id
   destination_cidr_block = var.subnets["pub"]
