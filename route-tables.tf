@@ -91,7 +91,7 @@ resource "aws_route" "gweprt-route" {
 resource "aws_route_table_association" "gweprt" {
   count          = var.deploy_gwep && !(var.egress_only_internet_gateway) ? local.num-availbility-zones : 0
   subnet_id      = aws_subnet.gwep.*.id[count.index]
-  route_table_id = aws_route_table.gweprt.id
+  route_table_id = aws_route_table.gweprt.0.id
 }
 
 resource "aws_route_table" "igwrt" {

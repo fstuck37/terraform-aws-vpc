@@ -37,7 +37,7 @@ resource "aws_vpc_endpoint" "private-interface-endpoints" {
 }
 
 resource "aws_vpc_endpoint" "GatewayLoadBalancer" {
-  count  = var.deploy_gwep && !(egress_only_internet_gateway) ? 1 : 0
+  count  = var.deploy_gwep && !(var.egress_only_internet_gateway) ? 1 : 0
   vpc_id            = aws_vpc.main_vpc.id
   vpc_endpoint_type = "GatewayLoadBalancer"
   subnet_ids        = aws_subnet.gwep.*.id
