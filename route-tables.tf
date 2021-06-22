@@ -55,11 +55,20 @@ resource "aws_route" "privrt-gateway" {
 }
 
 resource "aws_route" "pub-default" {
-  count                  = contains(keys(var.subnets), "pub") && !var.egress_only_internet_gateway ? 1 : 0
+  count                  = contains(keys(var.subnets), "pub") && !var.deploy_gwep && !var.egress_only_internet_gateway ? 1 : 0
   route_table_id         = join("",aws_route_table.pubrt.*.id)
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.inet-gw.0.id
 }
+
+resource "aws_route" "gweprt-route" {
+  count                  = contains(keys(var.subnets), "pub") && var.deploy_gwep && !var.egress_only_internet_gateway ? 1 : 0
+  route_table_id         = join("",aws_route_table.pubrt.*.id)
+  destination_cidr_block = "0.0.0.0/0"
+  vpc_endpoint_id = aws_vpc_endpoint.GatewayEndPoint.0.id
+}
+
+
 
 resource "aws_route" "pub-default-eg" {
   count                  = contains(keys(var.subnets), "pub") && var.egress_only_internet_gateway ? 1 : 0
