@@ -36,7 +36,7 @@ resource "aws_vpc_endpoint" "private-interface-endpoints" {
   tags                      = merge(var.tags, map("Name", "${each.value.name}"))
 }
 
-resource "aws_vpc_endpoint" "GatewayLoadBalancer" {
+resource "aws_vpc_endpoint" "GatewayEndPoint" {
   count  = var.deploy_gwep && !(var.egress_only_internet_gateway) ? 1 : 0
   vpc_id            = aws_vpc.main_vpc.id
   vpc_endpoint_type = "Gateway"
