@@ -61,7 +61,7 @@ resource "aws_route" "pub-default" {
   gateway_id             = aws_internet_gateway.inet-gw.0.id
 }
 
-resource "aws_route" "gweprt-route" {
+resource "aws_route" "pub-default-gwep" {
   count                  = contains(keys(var.subnets), "pub") && var.deploy_gwep && !var.egress_only_internet_gateway ? 1 : 0
   route_table_id         = join("",aws_route_table.pubrt.*.id)
   destination_cidr_block = "0.0.0.0/0"
