@@ -14,7 +14,7 @@
 ##################################################
 
 resource "aws_route_table" "pubrt" {
-  count  = !contains(keys(var.subnets), "pub") ? 0 : 1
+  count  = !contains(keys(var.subnets), "pub") || var.deploy_gwep ? 0 : 1
   vpc_id = aws_vpc.main_vpc.id
   tags   = merge(
     var.tags,
@@ -121,7 +121,7 @@ resource "aws_route_table_association" "igwrt-association" {
 
 resource "aws_route" "igwrt-pub-route" {
   count  = var.deploy_gwep && !(var.egress_only_internet_gateway) ? local.num-availbility-zones : 0
-  route_table_id = aws_route_table.igwrt.*.id[count.index]
+  route_table_id = aws_route_table.igwrt.0.id
   vpc_endpoint_id = aws_vpc_endpoint.GatewayEndPoint.*.id[count.index]
   destination_cidr_block = cidrsubnet(var.subnets["pub"],ceil(log(length(var.zones[var.region]),2)),local.azs-list[count.index])
 }
