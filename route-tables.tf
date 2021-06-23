@@ -122,10 +122,8 @@ resource "aws_route_table_association" "igwrt-association" {
 resource "aws_route" "igwrt-pub-route" {
   count  = var.deploy_gwep && !(var.egress_only_internet_gateway) ? 1 : 0
   route_table_id = aws_route_table.igwrt.0.id
-  vpc_endpoint_id = cidrsubnet(var.subnets["pub"],ceil(log(length(var.zones[var.region]),2)),local.azs-list[count.index])
-  destination_cidr_block = var.subnets["pub"]
+  vpc_endpoint_id = aws_vpc_endpoint.GatewayEndPoint.0.id
+  destination_cidr_block = cidrsubnet(var.subnets["pub"],ceil(log(length(var.zones[var.region]),2)),local.azs-list[count.index])
 }
-
-
 
 
