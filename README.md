@@ -98,6 +98,12 @@ Argument Reference
    ```
    * **zones** - Optional : Map of AWS zones with a value equal to a list of the availability zones in the region. Each of the AZs listed are utilized for the VPC.
    * **egress_only_internet_gateway** - Optional : Boolean to deploy egress_only_internet_gateway instead of aws_internet_gateway defaults to false
+
+
+   * **fixed-subnets** - Optional : Keys must match subnet-order and values are the list of subnets for each AZ. The number of subnets specified in each list needs to match the number of AZs. 'pub' is the only special name used."
+   * **fixed-name** - Optional : Keys must match subnet-order and values are the name of subnets for each AZ. The number of subnets specified in each list needs to match the number of AZs. 'pub' is the only special name used."
+   * **amazonaws-com** - Optional : Ability to change principal for flowlogs from amazonaws.com to amazonaws.com.cn."
+
 * **Subnet Information**
    * **subnets** - Optional : Keys are used for subnet names and values are the subnets for the various layers. These will be divided by the number of AZs based on ceil(log(length(var.zones[var.region]),2)). 'pub' is the only special name used for the public subnet.
    ```
@@ -149,11 +155,15 @@ Argument Reference
    * **block_ports** - Optional : Ports to block both inbound and outbound
    * **ingress_block** - Optional : CIDR blocks to block inbound
    * **egress_block** - Optional : CIDR blocks to block outbound
-* **DxGW, NAT Gateway, Endpoints, and Peer Links**
-
+* **TxGW, DxGW, NAT Gateway, Endpoints, VPN, and Peer Links**
    * **dx_bgp_default_route** - Optional : A boolean flag that indicates that the default gateway will be advertised via BGP over Direct Connect and causes the script to not deploy NAT Gateways.
    * **enable_pub_route_propagation** - Optional : A boolean flag that indicates that the routes should be propagated to the pub routing table. Defaults to False.
    * **dx_gateway_id** - Optional : specify the Direct Connect Gateway ID to associate the VGW with.
+   * **transit_gateway_id** - Optional : specify the Transit Gateway ID within the same account to associate the VPC with."
+   * **appliance_mode_support** - (Optional) Whether Appliance Mode support is enabled. If enabled, a traffic flow between a source and destination uses the same Availability Zone for the VPC attachment for the lifetime of that flow. Valid values: disable, enable. Default value: disable."
+   * **transit_gateway_routes** - Optional : specify the networks to route to the Transit Gateway"
+   * **vpn_connections** - Optional : A map of a map with the settings for each VPN.  The key will be the name of the VPN"
+   * **default_vpn_connections** - Do not use: This defines the default values for each map entry in vpn_connections. Do not override this."
    * **enable-s3-endpoint** - Optional : Enable the S3 Endpoint, default is false
    * **enable-dynamodb-endpoint** - Optional : Enable the DynamoDB Endpoint, default is false
    * **private_endpoints** - Optional : List of Maps for private AWS Endpoints - `<REGION>` will be replace with the region of the VPC. This helps standardize inputs between VPCs for example you can send com.amazonaws.<REGION>.cloudformation for a cloudformation endpoint. The keys for the maps are as follows: name[Name of Resource], subnet[Name of the subnet group for the Endpoint], service[<REGION> will be replace with the region of the VPC.], security_group[sgid of the sg to apply, if more than one is needed they should be | delimited]

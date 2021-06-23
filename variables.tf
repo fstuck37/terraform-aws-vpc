@@ -195,6 +195,11 @@ variable "transit_gateway_id" {
   default     = false
 }
 
+variable "appliance_mode_support" {
+  description = "(Optional) Whether Appliance Mode support is enabled. If enabled, a traffic flow between a source and destination uses the same Availability Zone for the VPC attachment for the lifetime of that flow. Valid values: disable, enable. Default value: disable."
+  default     = "disable"
+}
+
 variable "transit_gateway_routes" {
   type = list(string)
   description = "Optional : specify the networks to route to the Transit Gateway"
