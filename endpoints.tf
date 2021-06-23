@@ -40,6 +40,6 @@ resource "aws_vpc_endpoint" "GatewayEndPoint" {
   count  = var.deploy_gwep && !(var.egress_only_internet_gateway) ? 1 : 0
   vpc_id            = aws_vpc.main_vpc.id
   vpc_endpoint_type = "GatewayLoadBalancer"
-  subnet_ids        = aws_subnet.gwep.0.id
+  subnet_ids        = [aws_subnet.gwep.0.id]
   service_name      = var.gwep_service_name
 }
