@@ -14,7 +14,7 @@
 ##################################################
 
 resource "aws_route_table" "pubrt" {
-  count  = !contains(keys(var.subnets), "pub") ? 0 : 1
+  count  = !contains(keys(var.subnets), "pub") ? 0 : ( var.deploy_gwep && !(var.egress_only_internet_gateway) ? local.num-availbility-zones : 1 )
   vpc_id = aws_vpc.main_vpc.id
   tags   = merge(
     var.tags,
