@@ -29,8 +29,8 @@ output "map_subnet_arn_list" {
 }
 
 output "pubrt_id" {
-  description = "The ID of the public routing table"
-  value = (join("",aws_route_table.pubrt.*.id))
+  description = "The ID(s) of the public routing table"
+  value = aws_route_table.pubrt.*.id
 }
 
 output "privrt_id" {

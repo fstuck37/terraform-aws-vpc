@@ -18,7 +18,7 @@ resource "aws_route_table" "pubrt" {
   vpc_id = aws_vpc.main_vpc.id
   tags   = merge(
     var.tags,
-    map("Name",format("%s","${var.name-vars["account"]}-${var.name-vars["name"]}-pub")),
+    map("Name", ( var.deploy_gwep && !(var.egress_only_internet_gateway) ? format("%s","${var.name-vars["account"]}-${var.name-vars["name"]}-pub") : format("%s","${var.name-vars["account"]}-${var.name-vars["name"]}-prod-az-${element(split("-", element(var.zones[var.region],count.index)), length(split("-", element(var.zones[var.region],count.index))) - 1)}") ),
     local.resource-tags["aws_route_table"]
   )
 }
