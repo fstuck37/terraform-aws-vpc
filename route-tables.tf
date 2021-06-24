@@ -66,7 +66,7 @@ resource "aws_route" "pub-default" {
 }
 
 resource "aws_route" "pub-default-gwep" {
-  count                  = contains(keys(var.subnets), "pub") && var.deploy_gwep && !var.egress_only_internet_gateway ? 1 : 0
+  count                  = contains(keys(var.subnets), "pub") && var.deploy_gwep && !var.egress_only_internet_gateway ? local.num-availbility-zones : 0
   route_table_id         = aws_route_table.pubrt.*.id[count.index]
   destination_cidr_block = "0.0.0.0/0"
   vpc_endpoint_id        = aws_vpc_endpoint.GatewayEndPoint.*.id[count.index]
