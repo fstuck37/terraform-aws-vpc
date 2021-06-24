@@ -24,9 +24,9 @@ resource "aws_route_table" "pubrt" {
 }
 
 resource "aws_vpn_gateway_route_propagation" "pubrt" {
-  count          = contains(keys(var.subnets), "pub") && var.enable_pub_route_propagation == true ? 1 : 0
+  count          = contains(keys(var.subnets), "pub") && var.enable_pub_route_propagation == true ? ( var.deploy_gwep && !(var.egress_only_internet_gateway) ? local.num-availbility-zones : 1 ) : 0
   vpn_gateway_id = aws_vpn_gateway.vgw.id
-  route_table_id = aws_route_table.pubrt.*.id[0]
+  route_table_id = aws_route_table.pubrt.*.id[count.index]
 }
 
 resource "aws_route_table" "privrt" {
@@ -44,8 +44,12 @@ resource "aws_route_table" "privrt" {
 resource "aws_route_table_association" "associations" {
   count          = length(var.subnets)*local.num-availbility-zones
   subnet_id      = aws_subnet.subnets.*.id[count.index]
-  route_table_id = replace(data.template_file.subnets-tags.*.rendered[count.index], "pub", "") != data.template_file.subnets-tags.*.rendered[count.index] ? join("",aws_route_table.pubrt.*.id) : aws_route_table.privrt.*.id[count.index % length(var.zones[var.region])]
+  route_table_id = replace(data.template_file.subnets-tags.*.rendered[count.index], "pub", "") != data.template_file.subnets-tags.*.rendered[count.index] ? ( var.deploy_gwep && !(var.egress_only_internet_gateway) ? aws_route_table.pubrt.*.id[count.index] : join("",aws_route_table.pubrt.*.id) ) : aws_route_table.privrt.*.id[count.index % length(var.zones[var.region])]
 }
+
+
+
+
 
 resource "aws_route" "privrt-gateway" {
   count                  = !contains(keys(var.subnets), "pub")  || !var.deploy_natgateways || var.dx_bgp_default_route ? 0 : local.num-availbility-zones
@@ -81,7 +85,7 @@ resource "aws_route" "pub-default-eg" {
 /* Gateway Endpoint Routing Setup */
 
 resource "aws_route_table" "gweprt" {
-  count  = var.deploy_gwep && !(var.egress_only_internet_gateway) ? local.num-availbility-zones : 0
+  count  = contains(keys(var.subnets), "pub") && var.deploy_gwep && !(var.egress_only_internet_gateway) ? local.num-availbility-zones : 0
   vpc_id = aws_vpc.main_vpc.id
   tags   = merge(
     var.tags,
@@ -91,20 +95,20 @@ resource "aws_route_table" "gweprt" {
 }
 
 resource "aws_route" "gweprt-route" {
-  count                  = var.deploy_gwep && !(var.egress_only_internet_gateway) ? local.num-availbility-zones : 0
+  count                  = contains(keys(var.subnets), "pub") && var.deploy_gwep && !(var.egress_only_internet_gateway) ? local.num-availbility-zones : 0
   route_table_id         = aws_route_table.gweprt.*.id[count.index]
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.inet-gw.0.id
 }
 
 resource "aws_route_table_association" "gweprt" {
-  count          = var.deploy_gwep && !(var.egress_only_internet_gateway) ? local.num-availbility-zones : 0
+  count          = contains(keys(var.subnets), "pub") && var.deploy_gwep && !(var.egress_only_internet_gateway) ? local.num-availbility-zones : 0
   subnet_id      = aws_subnet.gwep.*.id[count.index]
   route_table_id = aws_route_table.gweprt.*.id[count.index]
 }
 
 resource "aws_route_table" "igwrt" {
-  count  = var.deploy_gwep && !(var.egress_only_internet_gateway) ? 1 : 0
+  count  = contains(keys(var.subnets), "pub") && var.deploy_gwep && !(var.egress_only_internet_gateway) ? 1 : 0
   vpc_id = aws_vpc.main_vpc.id
   tags   = merge(
     var.tags,
@@ -114,13 +118,13 @@ resource "aws_route_table" "igwrt" {
 }
 
 resource "aws_route_table_association" "igwrt-association" {
-  count          = var.deploy_gwep && !(var.egress_only_internet_gateway) ? 1 : 0
+  count          = contains(keys(var.subnets), "pub") && var.deploy_gwep && !(var.egress_only_internet_gateway) ? 1 : 0
   gateway_id     = aws_internet_gateway.inet-gw.0.id
   route_table_id = aws_route_table.igwrt.0.id
 }
 
 resource "aws_route" "igwrt-pub-route" {
-  count  = var.deploy_gwep && !(var.egress_only_internet_gateway) ? local.num-availbility-zones : 0
+  count  = contains(keys(var.subnets), "pub") && var.deploy_gwep && !(var.egress_only_internet_gateway) ? local.num-availbility-zones : 0
   route_table_id = aws_route_table.igwrt.0.id
   vpc_endpoint_id = aws_vpc_endpoint.GatewayEndPoint.*.id[count.index]
   destination_cidr_block = cidrsubnet(var.subnets["pub"],ceil(log(length(var.zones[var.region]),2)),local.azs-list[count.index])
