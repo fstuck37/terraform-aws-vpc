@@ -67,18 +67,16 @@ resource "aws_route" "pub-default" {
 
 resource "aws_route" "pub-default-gwep" {
   count                  = contains(keys(var.subnets), "pub") && var.deploy_gwep && !var.egress_only_internet_gateway ? 1 : 0
-  route_table_id         = join("",aws_route_table.pubrt.*.id)
+  route_table_id         = aws_route_table.pubrt.*.id[count.index]
   destination_cidr_block = "0.0.0.0/0"
-  vpc_endpoint_id = aws_vpc_endpoint.GatewayEndPoint.0.id
+  vpc_endpoint_id        = aws_vpc_endpoint.GatewayEndPoint.*.id[count.index]
 }
-
-
 
 resource "aws_route" "pub-default-eg" {
   count                  = contains(keys(var.subnets), "pub") && var.egress_only_internet_gateway ? 1 : 0
   route_table_id         = join("",aws_route_table.pubrt.*.id)
   destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_egress_only_internet_gateway.eg-inet-gw.0.id
+  gateway_id             = join("",aws_egress_only_internet_gateway.eg-inet-gw.*.id)
 }
 
 
