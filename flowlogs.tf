@@ -16,6 +16,7 @@ resource "aws_flow_log" "vpc_flowlog" {
   log_destination = aws_cloudwatch_log_group.flowlog_group.0.arn
   iam_role_arn = aws_iam_role.flowlog_role.0.arn
   traffic_type = "ALL"
+  log_format = var.flow_log_filter
 }
 
 resource "aws_cloudwatch_log_group" "flowlog_group" {
