@@ -255,7 +255,7 @@ variable "aws_lambda_function_name" {
 
 variable "flow_log_filter" {
   description = "CloudWatch subscription filter to match flow logs."
-  default = "[version, account, eni, source, destination, srcport, destport, protocol, packets, bytes, windowstart, windowend, action, flowlogstatus]"
+  default = "[version, account-id, interface-id, srcaddr, dstaddr, srcport, dstport, protocol, packets, bytes, start, end, action, log-status, vpc-id, subnet-id, instance-id, tcp-flags, type, pkt-srcaddr, pkt-dstaddr, region, az-id, sublocation-type, sublocation-id, pkt-src-aws-service, pkt-dst-aws-service, flow-direction]"
 }
 
 variable "cloudwatch_retention_in_days" {
