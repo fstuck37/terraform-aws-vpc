@@ -258,6 +258,11 @@ variable "flow_log_filter" {
   default = "[version, account-id, interface-id, srcaddr, dstaddr, srcport, dstport, protocol, packets, bytes, start, end, action, log-status, vpc-id, subnet-id, instance-id, tcp-flags, type, pkt-srcaddr, pkt-dstaddr, region, az-id, sublocation-type, sublocation-id, pkt-src-aws-service, pkt-dst-aws-service, flow-direction]"
 }
 
+variable "flow_log_format" {
+  description = "VPC flow log format."
+  default = "${version} ${account-id} ${interface-id} ${srcaddr} ${dstaddr} ${srcport} ${dstport} ${protocol} ${packets} ${bytes} ${start} ${end} ${action} ${log-status} ${vpc-id} ${subnet-id} ${instance-id} ${tcp-flags} ${type} ${pkt-srcaddr} ${pkt-dstaddr} ${region} ${az-id} ${sublocation-type} ${sublocation-id} ${pkt-src-aws-service} ${pkt-dst-aws-service} ${flow-direction}"
+}
+
 variable "cloudwatch_retention_in_days" {
   description = "Optional : Number of days to keep logs within the cloudwatch log_group. The default is 7 days."
   default = "7"
