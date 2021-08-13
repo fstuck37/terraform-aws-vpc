@@ -260,7 +260,7 @@ variable "flow_log_filter" {
 
 variable "flow_log_format" {
   description = "VPC flow log format."
-  default = "\\${version} \\${account-id} \\${interface-id} \\${srcaddr} \\${dstaddr} \\${srcport} \\${dstport} \\${protocol} \\${packets} \\${bytes} \\${start} \\${end} \\${action} \\${log-status} \\${vpc-id} \\${subnet-id} \\${instance-id} \\${tcp-flags} \\${type} \\${pkt-srcaddr} \\${pkt-dstaddr} \\${region} \\${az-id} \\${sublocation-type} \\${sublocation-id} \\${pkt-src-aws-service} \\${pkt-dst-aws-service} \\${flow-direction}"
+  default = "$${version} $${account-id} $${interface-id} $${srcaddr} $${dstaddr} $${srcport} $${dstport} $${protocol} $${packets} $${bytes} $${start} $${end} $${action} $${log-status} $${vpc-id} $${subnet-id} $${instance-id} $${tcp-flags} $${type} $${pkt-srcaddr} $${pkt-dstaddr} $${region} $${az-id} $${sublocation-type} $${sublocation-id} $${pkt-src-aws-service} $${pkt-dst-aws-service} $${flow-direction}"
 }
 
 variable "cloudwatch_retention_in_days" {
