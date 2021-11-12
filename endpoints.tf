@@ -33,7 +33,14 @@ resource "aws_vpc_endpoint" "private-interface-endpoints" {
   vpc_endpoint_type         = "Interface"
   subnet_ids                = zipmap(var.subnet-order, chunklist(aws_subnet.subnets.*.id, local.num-availbility-zones))[each.value.subnet]
   security_group_ids        = compact(split("|", each.value.security_group))
-  tags                      = merge(var.tags, map("Name", "${each.value.name}"))
+ 
+  tags                      = merge(
+    var.tags,
+    map("Name", "${each.value.name}"),
+    local.resource-tags[each.value.name]
+  )
+
+
 }
 
 resource "aws_vpc_endpoint" "GatewayEndPoint" {
