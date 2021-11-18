@@ -255,7 +255,7 @@ variable "aws_lambda_function_name" {
 
 variable "flow_log_filter" {
   description = "CloudWatch subscription filter to match flow logs."
-  default     = " "
+  default     = ""
 }
 
 variable "flow_log_format" {
