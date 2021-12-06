@@ -63,6 +63,12 @@ variable "shared_resolver_rule" {
   default     = false
 }
 
+variable "exclude_resolver_rule_ids" {
+  description = "Optional : A list of resolve rule IDs to exclude from the resolve rule associations."
+  type        = list(string)
+  default     = []
+}
+
 variable "route53_resolver_endpoint" {
   type = string
   description = "Optional : A boolean flag to enable/disable Route53 Resolver Endpoint. Defaults false."
