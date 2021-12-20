@@ -49,6 +49,9 @@ locals {
   emptymaps = [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}]
   empty-subnet-tags = zipmap(local.subnet-order, slice(local.emptymaps, 0 ,length(local.subnet-order)))
   subnet-tags = merge(local.empty-subnet-tags,var.subnet-tags)
+ 
+  flow_log_destination_arn = (var.enable_flowlog && var.flow_log_destination_arn != "") ? var.flow_log_destination_arn : (var.flow_log_destination_type != "s3") ? aws_cloudwatch_log_group.flowlog_group[var.region].arn : "------ Must Specify S3 ARN ------"
+  flow_log_iam_role_arn    = var.flow_log_traffic_type == "s3" ? null : lookup(lookup( aws_iam_role.flowlog_role, "${var.name-vars["account"]}-${replace(var.region,"-", "")}-${var.name-vars["name"]}-flow-log-role", {}), "arn", null)
   
   resource_list = ["aws_vpc", "aws_vpn_gateway", "aws_subnet", "aws_network_acl", "aws_internet_gateway", "aws_cloudwatch_log_group", "aws_vpc_dhcp_options", "aws_route_table", "aws_route53_resolver_endpoint"]
   private_endpoints_names = [ for endpoint in var.private_endpoints : endpoint.name ]

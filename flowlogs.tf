@@ -10,6 +10,7 @@
 #                                                #
 ##################################################
 
+/*
 resource "aws_flow_log" "vpc_flowlog" {
   count = var.enable_flowlog ? 1 : 0
   vpc_id = aws_vpc.main_vpc.id
@@ -18,9 +19,32 @@ resource "aws_flow_log" "vpc_flowlog" {
   traffic_type = "ALL"
   log_format = var.flow_log_format
 }
+*/
+
+resource "aws_flow_log" "vpc_flowlog" {
+  count = var.enable_flowlog ? 1 : 0
+  vpc_id                   = aws_vpc.main_vpc.id
+  log_destination          = local.flow_log_destination_arn
+  iam_role_arn             = local.flow_log_iam_role_arn
+  traffic_type             = var.flow_log_traffic_type
+  max_aggregation_interval = var.flow_log_max_aggregation_interval
+  log_format               = var.flow_log_format
+  log_destination_type     = var.flow_log_destination_type
+
+  dynamic "destination_options" {
+    for_each = var.flow_log_destination_type == "s3" ? [var.region] : []
+    content {
+      file_format                = var.flow_log_file_format
+      hive_compatible_partitions = var.flow_log_hive_compatible_partitions
+      per_hour_partition         = var.flow_log_per_hour_partition
+    }
+  }
+}
+
+
 
 resource "aws_cloudwatch_log_group" "flowlog_group" {
-  count = var.enable_flowlog ? 1 : 0
+  count = var.enable_flowlog && var.flow_log_destination_type == "cloud-watch-logs" ? 1 : 0
   name = aws_vpc.main_vpc.id
   retention_in_days = var.cloudwatch_retention_in_days
   tags = merge(
@@ -31,7 +55,7 @@ resource "aws_cloudwatch_log_group" "flowlog_group" {
 }
 
 resource "aws_iam_role" "flowlog_role" {
-  count = var.enable_flowlog ? 1 : 0
+  count = var.enable_flowlog && var.flow_log_destination_type == "cloud-watch-logs" ? 1 : 0
   name = "${var.name-vars["account"]}-${replace(var.region,"-", "")}-${var.name-vars["name"]}-flow-log-role"
   assume_role_policy = <<EOF
 {
@@ -51,7 +75,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "flowlog_write" {
-  count = var.enable_flowlog ? 1 : 0
+  count = var.enable_flowlog && var.flow_log_destination_type == "cloud-watch-logs" ? 1 : 0
   name = "${var.name-vars["account"]}-${replace(var.region,"-", "")}-${var.name-vars["name"]}-write-to-cloudwatch"
   role = aws_iam_role.flowlog_role.0.id
   policy = <<EOF
@@ -74,30 +98,9 @@ resource "aws_iam_role_policy" "flowlog_write" {
 EOF
 }
 
-resource "aws_iam_role" "flowlog_subscription_role" {
-  count = var.enable_flowlog ? 1 : 0
-
-  name = "${var.name-vars["account"]}-${replace(var.region,"-", "")}-${var.name-vars["name"]}-flow-log-subscription-role"
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "",
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "logs.${var.region}.${var.amazonaws-com}"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-} 
-EOF
-}
-
 /* Lambda */
 resource "aws_cloudwatch_log_subscription_filter" "flow_logs_lambda" {
-  count = var.enable_flowlog && !(var.aws_lambda_function_name == "none" ) ? 1 : 0
+  count = var.enable_flowlog && !(var.aws_lambda_function_name == "null") && var.flow_log_destination_type == "cloud-watch-logs" ? 1 : 0
   name = "${var.aws_lambda_function_name}-logfilter"
   log_group_name = aws_cloudwatch_log_group.flowlog_group.0.name
   filter_pattern = var.flow_log_filter
@@ -105,7 +108,7 @@ resource "aws_cloudwatch_log_subscription_filter" "flow_logs_lambda" {
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch" {
-  count          = var.enable_flowlog && !(var.aws_lambda_function_name == "none" ) ? 1 : 0
+  count          = var.enable_flowlog && !(var.aws_lambda_function_name == "null" ) && var.flow_log_destination_type == "cloud-watch-logs" ? 1 : 0
   statement_id   = "AllowExecutionFromCloudWatch_${aws_vpc.main_vpc.id}"
   action         = "lambda:InvokeFunction"
   function_name  = var.aws_lambda_function_name
