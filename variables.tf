@@ -257,7 +257,7 @@ variable "enable_flowlog" {
 variable "flow_log_destination_type" {
   description = "Optional : Type of flow log destination. Can be s3 or cloud-watch-logs. Defaults to S3."
   type        = string
-  default     = "cloud-watch-logs"
+  default     = "s3"
 }
 
 variable "flow_log_traffic_type" {
